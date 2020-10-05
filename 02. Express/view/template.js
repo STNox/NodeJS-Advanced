@@ -18,19 +18,12 @@ module.exports = {
         return list;
     },
     buttonGen:  function(title) {
-        if (title === undefined) {
-            return `
-            <button onclick="location.href='/create'">추가</button>
-            <button>수정</button>
-            <button>삭제</button>
-            `;
-        } else {
-            return `
-            <button onclick="location.href='/create'">추가</button>
-            <button onclick="location.href='/update?id=${title}'">수정</button>
-            <button onclick="location.href='/delete?id=${title}'">삭제</button>
-            `;
-        }
+        return `
+        <button onclick="location.href='/create'">추가</button>
+        <button onclick="location.href='/main/update/${title}'">수정</button>
+        <button onclick="location.href='/main/delete/${title}'">삭제</button>
+        `;
+        
     },
     createForm: function() {
         return `
