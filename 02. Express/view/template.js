@@ -20,8 +20,8 @@ module.exports = {
     buttonGen:  function(title) {
         return `
         <button onclick="location.href='/create'">추가</button>
-        <button onclick="location.href='/update/id/${title}'">수정</button>
-        <button onclick="location.href='/delete/id/${title}'">삭제</button>
+        <button onclick="location.href='/update/${title}'">수정</button>
+        <button onclick="location.href='/delete/${title}'">삭제</button>
         `;
         
     },
@@ -51,10 +51,19 @@ module.exports = {
     deleteForm: function(subject) {
         return `
         ${subject} 을/를 삭제하시겠습니까?
-        <form method="POST" action="/delete">
-            <input type="hidden" name="subject" value="${subject}">
-            <input type="submit" value="삭제">
-        </form>
+        <table>
+            <tr>
+                <td>
+                    <form method="POST" action="/delete">
+                        <input type="hidden" name="subject" value="${subject}">
+                        <input type="submit" value="삭제">
+                    </form>
+                </td>
+                <td>
+                    <button onclick="location.href='/id/${subject}'">취소</button>
+                </td>
+            </tr>
+        </table>
         `; // <input type="hidden" name="subject" value="${subject}"> -> 무엇을 지울지 지정해줌.
     },
     updateForm: function(subject, description) {
