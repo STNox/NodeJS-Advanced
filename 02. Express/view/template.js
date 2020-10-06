@@ -12,7 +12,7 @@ module.exports = {
         let list= '<ul>\n'
         for (let file of filelist) {
             let filename = file.substring(0, file.length - 4)
-            list += `<li><a href="/main/${filename}">${filename}</a></li>\n`;
+            list += `<li><a href="/id/${filename}">${filename}</a></li>\n`;
         }
         list += '</ul>\n'
         return list;
@@ -20,14 +20,14 @@ module.exports = {
     buttonGen:  function(title) {
         return `
         <button onclick="location.href='/create'">추가</button>
-        <button onclick="location.href='/main/update/${title}'">수정</button>
-        <button onclick="location.href='/main/delete/${title}'">삭제</button>
+        <button onclick="location.href='/update/id/${title}'">수정</button>
+        <button onclick="location.href='/delete/id/${title}'">삭제</button>
         `;
         
     },
     createForm: function() {
         return `
-        <form method="POST" action="/create_proc">
+        <form method="POST" action="/create" enctype="multipart/form-data">
             <table>
                 <tr>
                     <td><label>제목</label></td>
@@ -38,17 +38,20 @@ module.exports = {
                     <td><textarea name="description" cols="40" rows="5"></textarea></td>
                 </tr>
                 <tr>
+                    <td><label>사진</label></td>
+                    <td><input type="file" name="image"></td>
+                </tr>
+                <tr>
                     <td colspan="2" style="text-align: center;"><input type="submit" value="생성"></td>
                 </tr>
             </table>
-            
         </form>
         `;
     },
     deleteForm: function(subject) {
         return `
         ${subject} 을/를 삭제하시겠습니까?
-        <form method="POST" action="/delete_proc">
+        <form method="POST" action="/delete">
             <input type="hidden" name="subject" value="${subject}">
             <input type="submit" value="삭제">
         </form>
@@ -56,7 +59,7 @@ module.exports = {
     },
     updateForm: function(subject, description) {
         return `
-        <form method="POST" action="/update_proc">
+        <form method="POST" action="/update" enctype="multipart/form-data">
         <input type="hidden" name="original" value="${subject}">
             <table>
                 <tr>
@@ -68,10 +71,14 @@ module.exports = {
                     <td><textarea name="description" cols="80" rows="10">${description}</textarea></td>
                 </tr>
                 <tr>
+                    <td><label>사진</label></td>
+                    <td><input type="file" name="image"></td>
+                </tr>
+                <tr>
                     <td colspan="2" style="text-align: center;"><input type="submit" value="수정"></td>
                 </tr>
             </table>
         </form>
         `;
-    }
+    },
 }
