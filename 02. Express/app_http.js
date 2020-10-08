@@ -36,7 +36,7 @@ app.get('/id/:id', (req, res) => {
 });
 
 app.get('/create', (req, res) => {
-    fs.readdir('data', function (error, filelist) {
+    fs.readdir('data', (error, filelist) => {
         let list = template.listGen(filelist);
         let control = template.buttonGen();
         let content = template.createForm();
@@ -60,8 +60,8 @@ app.post('/create', (req, res) => {
     });
 });
 
-app.get('/delete/id/:id', (req, res) => {
-    fs.readdir('data', function (error, filelist) {
+app.get('/delete/:id', (req, res) => {
+    fs.readdir('data', (error, filelist) => {
         let title = req.params.id;
         let list = template.listGen(filelist);
         let control = template.buttonGen();
@@ -81,8 +81,8 @@ app.post('/delete', (req, res) => {
     });
 });
 
-app.get('/update/id/:id', (req, res) => {
-    fs.readdir('data', function (error, filelist) {
+app.get('/update/:id', (req, res) => {
+    fs.readdir('data', (error, filelist) => {
         let list = template.listGen(filelist);
         let sbjct = req.params.id;
         console.log(sbjct);
@@ -90,34 +90,34 @@ app.get('/update/id/:id', (req, res) => {
         let filename = 'data/' + sbjct + '.txt';
         fs.readFile(filename, 'utf8', (error, buffer) => {
             let content = template.updateForm(sbjct, buffer)
-            let html = view.index(sbjct, list, content, control, true); // 수정하는 화면에서도 사진을 띄우려 할 때 sbjct로 바꿔줌.
+            let html = view.index(sbjct, list, content, control, true);  // 수정하는 화면에서도 사진을 띄우려 할 때 sbjct로 바꿔줌.
             res.send(html);
         });
     });
 });
 app.post('/update', (req, res) => {
-    let sbjct = req.body.subject;
-    let orgsbjct = req.body.original;
-    let dscrptn = req.body.description;
-    let filepath = 'data/' + orgsbjct + '.txt';
-    let imagePath = 'public/fileWebImage/' + orgsbjct + '.jpg';
+    let sbjct = req.body.subject;                                        // 입력창에 입력된 제목
+    let orgnsbjct = req.body.original;                                   // 원래 제목
+    let dscrptn = req.body.description;                                  // 입력창에 입력된 내용
+    let filepath = 'data/' + orgnsbjct + '.txt';
+    let imagePath = 'public/fileWebImage/' + orgnsbjct + '.jpg';
     fs.writeFile(filepath, dscrptn, error => {
-        if (orgsbjct !== sbjct) {                                        // 제목이 바뀔 경우
+        if (orgnsbjct !== sbjct) {                                       // 제출된 제목이 기존 제목과 다를 경우
             fs.renameSync(filepath, `data/${sbjct}.txt`);
             fs.renameSync(imagePath, `public/fileWebImage/${sbjct}.jpg`);
         }
-        let uploadType = req.files.image.type;
+        let uploadType = req.files.image.type;                           // 수정 시에 이미지를 넣지 않으면 기존 이미지 파일의 형식이 바뀌기 때문에, 이를 확인
         let uploadPath = req.files.image.path;
         if (uploadType.indexOf('image') >= 0) {                          // 수정 시에 이미지가 새로 들어오는지 확인(이미지 수정 없이 내용을 수정하는지)
             let imageName = sbjct + '.jpg';
             let newFileName = __dirname + '/public/fileWebImage/' + imageName;
                 fs.rename(imagePath, newFileName, error => {
-                let encoded = encodeURI(`/id/${sbjct}`)
+                let encoded = encodeURI(`/id/${sbjct}`);
                     res.status(302).redirect(encoded);
                 });
         } else {
-            fs.unlink(uploadPath, error => {
-                res.redirect(`/id/${sbjct}`)
+            fs.unlink(uploadPath, error => {                             // 이미지 형식이 아닌 파일이 생성되면 그것을 삭제
+                res.redirect(`/id/${sbjct}`);
             });
         }
     });
@@ -127,6 +127,6 @@ app.get('*', (req, res) => {
     res.status(404).send('Path not found');
 })
 
-app.listen(3000, function () {
+app.listen(3000, () => {
     util.log('Server running at http://localhost:3000');
 });
