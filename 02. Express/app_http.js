@@ -125,7 +125,7 @@ app.post('/update', (req, res) => {
 
 app.get('*', (req, res) => {
     res.status(404).send('Path not found');
-})
+});
 
 app.listen(3000, () => {
     util.log('Server running at http://localhost:3000');
