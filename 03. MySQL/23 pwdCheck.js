@@ -26,7 +26,7 @@ conn.query(sql, uid, function(error, results, fields) {
     if (error)
         console.log(error);
     let result = results[0];
-    if (result.pwd === pwdHash) {
+    if (result.pwd === pwdHash) { // result.pwd: 데이터베이스에 기록된 암호, pwdHash: 새로 입력한 암호
         console.log('Login 성공')
     } else {
         console.log('Login 실패: 패스워드가 다릅니다.');
