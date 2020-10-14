@@ -3,6 +3,9 @@ const bodyParser = require('body-parser');
 const cookieParser = require('cookie-parser');
 const session = require('express-session');
 const FileStore = require('session-file-store')(session);
+const uRouter = require('./userRouter');
+const bbsRouter = require('./BBSRouter');
+const fs = require('fs');
 
 const app = express();
 app.use('/bootstrap', express.static(__dirname + '/node_modules/bootstrap/dist'));
@@ -17,11 +20,15 @@ app.use(session({
     saveUninitialized: true,
     store: new FileStore({logFn: function(){}})
 }));
+app.use('/user', uRouter);
+app.use('/bbs', bbsRouter);
 
 app.get('/', (req, res) => {
-    const view = require('./view/test');
-    let html = view.test();
-    res.send(html);
+    fs.readFile('./view/index.html', 'utf8', (error, data) => {
+        if (error)
+            console.log(error);
+        res.send(data);
+    });
 });
 
 app.listen(3000, () => {

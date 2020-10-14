@@ -20,7 +20,7 @@ module.exports = {
                 </a>
                 <ul class="nav mr-auto">
                     <li class="nav-item">
-                        <a class="nav-link" style="color: white; margin-left: 5px;" href="index_login.html"><i class="fas fa-home" style="margin-right: 10px"></i>홈</a>
+                        <a class="nav-link" style="color: white; margin-left: 5px;" href="/"><i class="fas fa-home" style="margin-right: 10px"></i>홈</a>
                     </li>
                     <li class="nav-item">
                         <a class="nav-link" style="color: white" href="/logout">로그아웃</a>

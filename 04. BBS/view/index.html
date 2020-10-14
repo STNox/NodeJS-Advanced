@@ -1,7 +1,7 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="ko">
 <head>
-    <title>Bootstrap Example</title>
+    <title>My BBS</title>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
@@ -12,24 +12,6 @@
 </head>
 <body>
     <div class="container">
-        <nav class="navbar navbar-expand-sm bg-dark navbar-dark">
-            <!-- Brand/logo -->
-            <a class="navbar-brand" href="#">
-                <img src="media2/hoseo.jpg" alt="호서직업능력개발원" height="40px" style="margin-left: 10px;">
-            </a>
-            <!-- Links -->
-            <ul class="nav mr-auto">
-                <li class="nav-item">
-                    <a class="nav-link disabled" style="color: white; margin-left: 5px;" href="#"><i class="fas fa-home" style="margin-right: 10px"></i>홈</a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link" style="color: white" href="#">회원가입</a>
-                </li>
-            </ul>
-            <div class="navbar-text fixed-right invisible" style="color:white;">
-                홍길동님 반갑습니다!
-            </div>
-        </nav>
           <div id="demo" class="carousel slide" data-ride="carousel" style="margin-top: 40px; text-align: center;">
               <ul class="carousel-indicators">
                 <li data-target="#demo" data-slide-to="0" class="active"></li>
@@ -38,24 +20,24 @@
               </ul>
               <div class="carousel-inner">
                 <div class="carousel-item active">
-                  <img src="media2/motorcycle.jpg" alt="Motorcycle" height="500">
+                  <img src="/img/chicago.jpg" alt="Chicago" height="500">
                   <div class="carousel-caption">
-                    <h3>Motorcycle</h3>
-                    <p>Speed</p>
+                    <h3>Chicago</h3>
+                    <p>Chicago</p>
                   </div>   
                 </div>
                 <div class="carousel-item">
-                  <img src="media2/bicycle.jpg" alt="Bicycle" height="500">
+                  <img src="/img/ny.jpg" alt="New York" height="500">
                   <div class="carousel-caption">
-                    <h3>Bicycle</h3>
-                    <p>Pedal to the medal</p>
+                    <h3>New York</h3>
+                    <p>New York</p>
                   </div>   
                 </div>
                 <div class="carousel-item">
-                  <img src="media2/car.jpg" alt="Car" height="500">
+                  <img src="/img/la.jpg" alt="LA" height="500">
                   <div class="carousel-caption">
-                    <h3>Car</h3>
-                    <p>Excelerate</p>
+                    <h3>LA</h3>
+                    <p>LA</p>
                   </div>   
                 </div>
               </div>
@@ -66,48 +48,41 @@
                 <span class="carousel-control-next-icon"></span>
               </a>
           </div>
+          <div style="text-align: right;">
+            <button style="margin-top: 20px;" class="btn btn-info" onclick="location.href='/user/register'">회원가입</button>
+          </div>
+          <hr>
         <div class="row mt-5">
-            <div class="col-4"></div>
-            <div class="col-4">
-                <form action="index_login.html" method="post">
+            <div class="col-3"></div>
+            <div class="col-6">
+                <form action="/login" method="post">
                   <table class="table table-borderless">
                     <tr>
                       <td>
-                        <label class="col-form-label" for="user_id">ID:</label>
+                        <label class="col-form-label" for="user_id">사용자 ID :</label>
                       </td>
                       <td>
-                        <input type="text" class="form-control" id="user_id" placeholder="Enter your ID" name="user_id">
+                        <input type="text" class="form-control" id="uid" name="uid">
                       </td>
                     </tr>
                     <tr>
                       <td>
-                        <label class="col-form-label" for="pwd">Password:</label>
+                        <label class="col-form-label" for="pwd">패스워드 :</label>
                       </td>
                       <td>
-                        <input type="password" class="form-control" id="pwd" placeholder="Enter password" name="pswd">
-                      </td>
-                    </tr>
-                    <tr>
-                      <td colspan="2">
-                        <div class="form-group form-check">
-                          <label class="form-check-label">
-                            <input class="form-check-input" type="checkbox" name="remember"> Remember me
-                          </label>
-                        </div>
+                        <input type="password" class="form-control" id="pwd" name="pwd">
                       </td>
                     </tr>
                     <tr>
                       <td style="text-align: center" colspan="2">
                         <button type="submit" class="btn btn-primary">로그인</button>
-                        <button class="btn btn-secondary">취소</button>
                       </td>
                     </tr>
                   </table>
-
                 </form>
                 <br><br>
-            </div>
-            <div class="col-4"></div>
+              </div>
+              <div class="col-3"></div>
         </div>
         <nav class="navbar navbar-expand-sm bg-light justify-content-center navbar-light fixed-bottom">
           <span class="navbar-text">Copyright &copy; 2020, Wy</span>
