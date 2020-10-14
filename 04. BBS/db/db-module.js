@@ -20,7 +20,7 @@ module.exports = {
         });
         return conn;
     },
-    regUser: function(){
+    regUser: function(params){
         let conn = this.getConnection();
         let sql = `INSERT INTO users(uid, pwd, uname, tel, email) VALUES (?, ?, ?, ?, ?)`
         conn.query(sql, params, (error, fields) => {

@@ -21,9 +21,10 @@ userRouter.post('/register', (req, res) => {
     if (pwd === pwd2) {
         let pwdHash = util.genHash(pwd);
         let params = [uid, pwdHash, tel, email, uname];
-        dm.regUser()
+        dm.regUser(params, ()=> {
+            res.redirect('/list');
+        });
     }
-    res.send(`<h1>uid: ${uid}, pwd: ${pwd}, pwd2: ${pwd2}, uname: ${uname}</h1>`);
 });
 
 module.exports = userRouter;
