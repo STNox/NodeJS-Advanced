@@ -41,7 +41,7 @@ app.post('/login', (req, res) => {
     let pwdHash = dm.genHash(pwd);
     dm.getUserInfo(uid, result => {
         if (result === undefined) {
-            let html = am.alerMsg(`Login 실패, uid ${uid}이/가 존재하지 않습니다.`, '/login');
+            let html = am.alertMsg(`Login 실패, uid ${uid}이/가 존재하지 않습니다.`, '/login');
             res.send(html);
         } else {
             if (result.pwd === pwdHash) {
@@ -52,7 +52,7 @@ app.post('/login', (req, res) => {
                     res.redirect('/');
                 });
             } else {
-                let html = am.alerMsg('Login 실패, 패스워드가 일치하지 않습니다.', '/login');
+                let html = am.alertMsg('Login 실패, 패스워드가 일치하지 않습니다.', '/login');
                 res.send(html);
             }
         }   

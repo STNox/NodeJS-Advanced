@@ -26,7 +26,7 @@ app.post('/login', (req, res) => {
     dm.getUserInfo(uid, result => {
         if (result === undefined) {
             const view = require('./view/alertMessage');
-            let html = view.alerMsg(`Login 실패, uid ${uid}이/가 존재하지 않습니다.`, '/login');
+            let html = view.alertMsg(`Login 실패, uid ${uid}이/가 존재하지 않습니다.`, '/login');
             res.send(html);
         } else {
             if (result.pwd === pwdHash) {
@@ -34,7 +34,7 @@ app.post('/login', (req, res) => {
                 res.redirect('/');
             } else {
                 const view = require('./view/alertMessage');
-                let html = view.alerMsg('Login 실패, 패스워드가 일치하지 않습니다.', '/login');
+                let html = view.alertMsg('Login 실패, 패스워드가 일치하지 않습니다.', '/login');
                 res.send(html);
             }
         }   

@@ -1,6 +1,5 @@
 const fs = require('fs');
 const mysql = require('mysql');
-const crypto = require('crypto');
 
 let info = fs.readFileSync('./mysql.json', 'utf-8');
 let config = JSON.parse(info); 
@@ -22,7 +21,7 @@ module.exports = {
     },
     getAllLists: function(callback) {       // 화살표 함수로 하면 동작 안 함
         let conn = this.getConnection();    // 파일 내 함수 불러오기 this.~
-        let sql = `SELECT uid, uname, DATE_FORMAT(regDate, '%Y-%m-%d %T') AS regDate FROM users ORDER BY regDate;`;
+        let sql = `SELECT uid, uname, DATE_FORMAT(regDate, '%Y-%m-%d %T') AS regDate FROM users WHERE isDeleted=0 ORDER BY regDate LIMIT 10;`;
         conn.query(sql, (error, rows, field) => {
             if (error)
                 console.log(error);
@@ -40,9 +39,24 @@ module.exports = {
         });
         conn.end();
     },
-    genHash: function(sth) {
-        let shasum = crypto.createHash('sha256');
-        shasum.update(sth);
-        return shasum.digest('base64');
+    deleteUser: function(uid, callback) {
+        let conn = this.getConnection();
+        let sql = `UPDATE users SET isDeleted=1 WHERE uid LIKE ?;`;
+        conn.query(sql, uid, (error, fields) => {
+            if (error)
+                console.log(error);
+            callback();
+        });
+        conn.end();
+    },
+    updateUser: function(params, callback) {
+        let conn = this.getConnection();
+        let sql = `UPDATE users SET pwd=? WHERE uid LIKE ?`;
+        conn.query(sql, params, (error, fields) => {
+            if (error)
+                console.log(error);
+            callback();
+        });
+        conn.end();
     }
 }

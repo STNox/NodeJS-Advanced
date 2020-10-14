@@ -1,4 +1,4 @@
-module.exports.alerMsg = function(message, url) {
+module.exports.alertMsg = function(message, url) {
     return `
     <!Doctype html>
     <html>

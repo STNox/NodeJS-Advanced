@@ -14,8 +14,8 @@ let conn = mysql.createConnection({
 conn.connect();
 
 let pwd = crypto.getPassword();
-let sql = `INSERT INTO users(uid, pwd, name) VALUES(?, ?, ?);`;
-let params = ['sylee', pwd, '이수연']
+let sql = `INSERT INTO users(uid, pwd, uname) VALUES(?, ?, ?);`;
+let params = ['admin', pwd, '관리자']
 conn.query(sql, params, function(error, fields) {
     if (error)
         console.log(error);
