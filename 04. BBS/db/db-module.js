@@ -21,7 +21,7 @@ module.exports = {
     },
     regUser: function(params, callback){
         let conn = this.getConnection();
-        let sql = `INSERT INTO users(uid, pwd, tel, email, uname) VALUES (?, ?, ?, ?, ?)`
+        let sql = `INSERT INTO users(uid, pwd, tel, email, uname) VALUES(?, ?, ?, ?, ?);`;
         conn.query(sql, params, (error, fields) => {
             if (error)
                 console.log(error);
@@ -48,6 +48,26 @@ module.exports = {
             if (error)
                 console.log(error);
             callback(rows);
+        });
+        conn.end();
+    },
+    regPost: function(params, callback) {
+        let conn = this.getConnection();
+        let sql = `INSERT INTO bbs(uid, title, content) VALUES(?, ?, ?);`;
+        conn.query(sql, params, (error, fields) => {
+            if (error)
+                console.log(error);
+            callback();
+        });
+        conn.end();
+    },
+    getPost: function(bid, callback) {
+        let conn = this.getConnection();
+        let sql = `SELECT bid, uid, title, content, modTime FROM bbs WHERE bid LIKE ?;`;
+        conn.query(sql, bid, (error, results, fields) => {
+            if (error)
+                console.log(error);
+            callback(results);
         });
         conn.end();
     }

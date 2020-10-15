@@ -1,5 +1,5 @@
 module.exports = {
-    header: function() {
+    header: function(uname) {
         return `
         <!DOCTYPE html>
         <html lang="ko">
@@ -27,7 +27,7 @@ module.exports = {
                     </li>
                 </ul>
                 <div class="navbar-text fixed-right" style="color:white;">
-                    홍길동님 반갑습니다!
+                    ${uname}님 반갑습니다!
                 </div>
             </nav>
         `;

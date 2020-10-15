@@ -1,37 +1,47 @@
 const express = require('express');
-const bodyParser = require('body-parser');
-const cookieParser = require('cookie-parser');
-const session = require('express-session');
-const FileStore = require('session-file-store')(session);
 const dm = require('./db/db-module');
 const util = require('./util');
 
-const app = express();
-app.use(bodyParser.urlencoded({extended: false}));
-app.use(cookieParser('1q2w3e4r5t6y'));
-app.use(session({
-    secret: '1q2w3e4r5t6y',
-    resave: false,
-    saveUninitialized: true,
-    store: new FileStore({logFn: function(){}})
-}));
 
 const bbsRouter = express.Router();
 
 bbsRouter.get('/list', util.isLoggedIn, (req, res) => {
     dm.getBbsLists(rows => {
-        const view = require('./view/bbsList');
+        console.log(rows);
+        const view = require('./view/BBS');
         let html = view.bbsList(req.session.uname, rows);
         res.send(html);
     });
 });
 
 bbsRouter.get('/create', (req, res) => {
-    res.send('BBSRouter get create');
+    const view = require('./view/BBS');
+    let html = view.createForm(req.session.uname, req.session.uid);
+    res.send(html);
 });
 
 bbsRouter.post('/create', (req, res) => {
+    let uid = req.body.uid;
+    let title = req.body.title;
+    let content = req.body.content;
+    let params = [uid, title, content];
+    dm.regPost(params, function() {
+        res.redirect('/bbs/list');
+    });
+});
 
+bbsRouter.get('/list/:bid', (req, res) => {
+    let bid = req.session.bid;
+    let title = req.session.title;
+    let uid = req.session.uid;
+    let modTime = req.session.modTime;
+    let content = req.session.content;
+    let results = [bid, title, uid, modTime, content];
+    dm.getPost(results, () => {
+        const view = require('./view/BBS');
+        let html = view.postForm(results);
+        res.send(html);
+    });
 });
 
 module.exports = bbsRouter;

@@ -20,8 +20,7 @@ function getConnection() {
     return conn;
 }
 
-let sql = `SELECT bid, title, uid, DATE_FORMAT(modTime, '%Y-%m-%d %T') AS regDate, viewCount FROM bbs 
-WHERE isDeleted=0 ORDER BY regDate DESC LIMIT 10;`;
+let sql = `alter table bbs add replyCount int default 0;`;
 let conn = getConnection();
 conn.query(sql, function(error, rows, fields) {
     if (error)
