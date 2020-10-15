@@ -1,7 +1,7 @@
 const fs = require('fs');
 const mysql = require('mysql');
 
-let info = fs.readFileSync('./mysql.json', 'utf-8');
+let info = fs.readFileSync('../mysql.json', 'utf-8');
 let config = JSON.parse(info); 
 
 
@@ -20,21 +20,12 @@ function getConnection() {
     return conn;
 }
 
-let sql = `
-    CREATE TABLE bbs (
-        bid INT NOT NULL PRIMARY KEY AUTO_INCREMENT,
-        uid VARCHAR(20) NOT NULL,
-        title VARCHAR(100) NOT NULL,
-        content VARCHAR(1000),
-        modTime DATETIME DEFAULT CURRENT_TIMESTAMP,
-        viewCount INT DEFAULT 0,
-        isDeleted INT DEFAULT 0,
-        FOREIGN KEY(uid) REFERENCES users(uid)
-    ) AUTO_INCREMENT=1001;`;
+let sql = `SELECT bid, title, uid, DATE_FORMAT(modTime, '%Y-%m-%d %T') AS regDate, viewCount FROM bbs 
+WHERE isDeleted=0 ORDER BY regDate DESC LIMIT 10;`;
 let conn = getConnection();
-conn.query(sql, function(error, fields) {
+conn.query(sql, function(error, rows, fields) {
     if (error)
         console.log(error);
-    console.log();
+    console.log(rows);
 });
 conn.end();

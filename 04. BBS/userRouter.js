@@ -1,6 +1,7 @@
 const express = require('express');                           // 모듈화
-const { genHash } = require('../03. MySQL/28 util');
 const dm = require('./db/db-module');
+const util = require('./util');
+const am = require('./view/alertMessage');
 
 
 const userRouter = express.Router();
@@ -21,9 +22,13 @@ userRouter.post('/register', (req, res) => {
     if (pwd === pwd2) {
         let pwdHash = util.genHash(pwd);
         let params = [uid, pwdHash, tel, email, uname];
-        dm.regUser(params, ()=> {
-            res.redirect('/list');
+        dm.regUser(params, function() {
+            let html = am.alertMsg('등록한 정보로 로그인해주십시오.', '/');
+            res.send(html);
         });
+    } else {
+        let html = am.alertMsg('패스워드가 일치하지 않습니다.', '/register');
+        res.send(html);
     }
 });
 

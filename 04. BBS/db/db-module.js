@@ -1,4 +1,3 @@
-const { response } = require('express');
 const fs = require('fs');
 const mysql = require('mysql');
 
@@ -20,9 +19,9 @@ module.exports = {
         });
         return conn;
     },
-    regUser: function(params){
+    regUser: function(params, callback){
         let conn = this.getConnection();
-        let sql = `INSERT INTO users(uid, pwd, uname, tel, email) VALUES (?, ?, ?, ?, ?)`
+        let sql = `INSERT INTO users(uid, pwd, tel, email, uname) VALUES (?, ?, ?, ?, ?)`
         conn.query(sql, params, (error, fields) => {
             if (error)
                 console.log(error);
@@ -30,10 +29,20 @@ module.exports = {
         });
         conn.end();
     },
+    getUserInfo: function(uid, callback) {
+        let conn = this.getConnection();
+        let sql = `SELECT * FROM users WHERE uid LIKE ?;`;
+        conn.query(sql, uid, (error, results, fields) => {
+            if (error)
+                console.log(error);
+            callback(results[0]);
+        });
+        conn.end();
+    },
     getBbsLists: function(callback) {       // 화살표 함수로 하면 동작 안 함
         let conn = this.getConnection();    // 파일 내 함수 불러오기 this.~
         let sql = `
-        SELECT bid, title, uid, DATE_FORMAT(regDate, '%Y-%m-%d %T') AS regDate, viewCount FROM bbs 
+        SELECT bid, title, uid, DATE_FORMAT(modTime, '%Y-%m-%d %T') AS regDate, viewCount FROM bbs 
             WHERE isDeleted=0 ORDER BY regDate DESC LIMIT 10;`;
         conn.query(sql, (error, rows, field) => {
             if (error)

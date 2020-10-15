@@ -1,17 +1,37 @@
-const express = require('express');                           // 모듈화
-const userRouter = require('./userRouter');
+const express = require('express');
+const bodyParser = require('body-parser');
+const cookieParser = require('cookie-parser');
+const session = require('express-session');
+const FileStore = require('session-file-store')(session);
+const dm = require('./db/db-module');
+const util = require('./util');
 
-const BBSRouter = express.Router();
+const app = express();
+app.use(bodyParser.urlencoded({extended: false}));
+app.use(cookieParser('1q2w3e4r5t6y'));
+app.use(session({
+    secret: '1q2w3e4r5t6y',
+    resave: false,
+    saveUninitialized: true,
+    store: new FileStore({logFn: function(){}})
+}));
 
-userRouter.get('/list', (req, res) => {
+const bbsRouter = express.Router();
 
+bbsRouter.get('/list', util.isLoggedIn, (req, res) => {
+    dm.getBbsLists(rows => {
+        const view = require('./view/bbsList');
+        let html = view.bbsList(req.session.uname, rows);
+        res.send(html);
+    });
 });
 
-userRouter.get('/create', (req, res) => {
+bbsRouter.get('/create', (req, res) => {
     res.send('BBSRouter get create');
 });
 
-userRouter.post('/create', (req, res) => {
+bbsRouter.post('/create', (req, res) => {
 
 });
-module.exports = BBSRouter;
+
+module.exports = bbsRouter;
