@@ -1,6 +1,7 @@
 const express = require('express');
 const dm = require('./db/db-module');
 const util = require('./util');
+const { bbsList } = require('./view/BBS');
 
 
 const bbsRouter = express.Router();
@@ -31,16 +32,24 @@ bbsRouter.post('/create', (req, res) => {
 });
 
 bbsRouter.get('/list/:bid', (req, res) => {
-    let bid = req.session.bid;
-    let title = req.session.title;
-    let uid = req.session.uid;
-    let modTime = req.session.modTime;
-    let content = req.session.content;
-    let results = [bid, title, uid, modTime, content];
-    dm.getPost(results, () => {
-        const view = require('./view/BBS');
-        let html = view.postForm(results);
-        res.send(html);
+    dm.getPost(req.params.bid, result => {
+        dm.getReply(req.params.bid, r_result => {
+            const view = require('./view/BBS');
+            let html = view.postForm(req.session.uname, result, r_result);
+            res.send(html);
+        });
+    });
+});
+
+
+bbsRouter.post('/comment', (req, res) => {
+    let bid = req.body.bid;
+    let uid = req.body.uid;
+    let content = req.body.content;
+    let params = [bid, uid, content];
+    console.log(params);
+    dm.regReply(params, function() {
+        res.redirect(`/bbs/list/${bid}`);
     });
 });
 

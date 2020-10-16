@@ -20,7 +20,8 @@ function getConnection() {
     return conn;
 }
 
-let sql = `alter table bbs add replyCount int default 0;`;
+let sql = `
+INSERT INTO reply(bid, uid, content) VALUES(1001, 'test', 123)`;
 let conn = getConnection();
 conn.query(sql, function(error, rows, fields) {
     if (error)

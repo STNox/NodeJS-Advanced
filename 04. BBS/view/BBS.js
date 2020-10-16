@@ -5,8 +5,8 @@ module.exports = {
         let tableRow = '';
         for (let row of rows) {
             tableRow += `<tr>
-                            <td style="padding-right: 20px; text-align: center;"><a href="/bbs/list/${row.bid}">${row.bid}</a></td>
-                            <td style="padding-right: 20px; text-align: center;"><a href="/bbs/list/${row.bid}">${row.title}</a></td>
+                            <td style="padding-right: 20px; text-align: center;">${row.bid}</td>
+                            <td style="padding-right: 20px; text-align: left;"><a href="/bbs/list/${row.bid}">${row.title}</a></td>
                             <td style="padding-right: 20px; text-align: center;">${uname}</td>
                             <td style="padding-right: 20px; text-align: center;">${row.regDate}</td>
                             <td style="padding-right: 20px; text-align: center;">${row.viewCount}</td>
@@ -26,11 +26,11 @@ module.exports = {
                     <table class="table table-striped" style="margin-top: 20px">
                         <thead>
                             <tr>    
-                                <th style="text-align: center;">번호</th>
-                                <th style="text-align: center;">제목</th>
-                                <th style="text-align: center;">글쓴이</th>
-                                <th style="text-align: center;">날짜</th>
-                                <th style="text-align: center;">조회 수</th>
+                                <th style="text-align: center; width: 10%">글 번호</th>
+                                <th style="text-align: center; width: 50%">제목</th>
+                                <th style="text-align: center; width: 10%">글쓴이</th>
+                                <th style="text-align: center; width: 20%">날짜</th>
+                                <th style="text-align: center; width: 10%">조회 수</th>
                             </tr>
                         </thead>
                         <tbody>
@@ -40,7 +40,7 @@ module.exports = {
                     <table class="table borderless">
                         <tr style="text-align: right">
                             <td>
-                                <button class="btn btn-dark" onclick="location.href='/bbs/create'">글쓰기</button>
+                                <button class="btn btn-secondary" onclick="location.href='/bbs/create'">글쓰기</button>
                             </td>
                         </tr>
                     </table>
@@ -59,7 +59,7 @@ module.exports = {
             <h3>게시글 작성</h3>
             <hr>
             <form method="POST" action="/bbs/create">
-                <table class="table borderless">
+                <table class="table-borderless">
                     <input type="hidden" name="uid" value="${uid}">
                     <tr>
                         <td><label for="title">제목</label></td>
@@ -80,23 +80,61 @@ module.exports = {
         ${template.footer()}
         `;
     },
-    postForm: function(uname, results) {
+    postForm: function(uname, result, r_result) {
+        console.log(r_result);
+        let replyRow = '';
+        for (let row of r_result) {
+            replyRow += `
+            <table class="table-borderless table-sm">
+                <tr>
+                    <td>${row.uname}</td>
+                <tr>
+                <tr>
+                    <td>${row.content}</td>
+                </tr>
+            </table>
+            `;
+        }
         return `
         ${template.header(uname)}
         
         <div class="container" style="margin-top: 20px">
-            <table>
+            <table class="table table-striped table-sm">
                 <tr>
-                    <td>글 번호: ${results.bid}</td>
-                    <td>제목: ${results.title}</td>
-                    <td>작성자: ${results.uid}</td>
-                    <td>작성 시간: ${results.modTime}</td>
+                    <td colspan="3" style="height: 10%">제목: ${result.title}</td>
                 </tr>
                 <tr>
-                    <td colspan="4">${results.content}</td>
+                    <td>글 번호: ${result.bid}</td>
+                    <td style="text-align: center">작성자: ${result.uname}</td>
+                    <td style="text-align: right">작성 시간: ${result.modTime}</td>
+                </tr>
+                <tr>
+                    <td colspan="3"></td>
+                </tr>
+                <tr>
+                    <td colspan="3">${result.content}</td>
                 </tr>
             </table>
+            <hr>
+            <div class="form-row float-right">
+                <button class="btn btn-secondary" onclick="location.href='/bbs/list'">글 목록</button>
+            </div>
+            <br><br>
+            <h4>댓글</h4>
+            ${replyRow}
+            <hr>
+            <form method="POST" action="/bbs/comment">
+                <input type="hidden" name="bid" value="${result.bid}">
+                <input type="hidden" name="uid" value="${r_result[0].uid}">
+                <table>
+                    <tr>
+                        <td><textarea style="resize: none" name="content" id="content" cols="100" rows="3"></textarea></td>
+                        <td><button type="submit" class="btn btn-primary">작성</td>
+                    </tr>
+                </table>
+            </form>
         </div>
         ${template.footer()}`
-    } //update bbs set viewCount=viewCount+1 where bid = 1001;
+    } //댓글 폼과 게시글 폼 분리
+    //update bbs set viewCount=viewCount+1 where bid = 1001;
 }

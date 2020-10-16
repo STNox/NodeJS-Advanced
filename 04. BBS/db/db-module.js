@@ -63,7 +63,34 @@ module.exports = {
     },
     getPost: function(bid, callback) {
         let conn = this.getConnection();
-        let sql = `SELECT bid, uid, title, content, modTime FROM bbs WHERE bid LIKE ?;`;
+        let sql = `
+        SELECT b.bid, b.title, u.uname, DATE_FORMAT(b.modTime, '%Y-%m-%d %T') AS modTime, b.content FROM bbs AS b
+            JOIN users AS u
+            ON b.uid=u.uid
+            WHERE bid=?;`;
+        conn.query(sql, bid, (error, results, fields) => {
+            if (error)
+                console.log(error);
+            callback(results[0]);
+        });
+        conn.end();
+    },
+    regReply: function(params, callback) {
+        let conn = this.getConnection();
+        let sql = `INSERT INTO reply(bid, uid, content) VALUES(?, ?, ?)`
+        conn.query(sql, params, (error, fields) => {
+            if (error)
+                console.log(error);
+            callback();
+        });
+        conn.end();
+    },
+    getReply: function(bid, callback) {
+        let conn = this.getConnection();
+        let sql = `
+        SELECT b.bid, u.uid, u.uname, DATE_FORMAT(r.regTime, '%Y-%m-%d %T') AS regTime, r.content FROM reply AS r
+            JOIN users AS u ON r.uid=u.uid
+            JOIN bbs AS b ON r.uid=b.uid;`;
         conn.query(sql, bid, (error, results, fields) => {
             if (error)
                 console.log(error);
@@ -72,3 +99,5 @@ module.exports = {
         conn.end();
     }
 }
+
+// update bbs set modTime=now() where bid = 1004;
