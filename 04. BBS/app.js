@@ -39,7 +39,7 @@ app.post('/login', (req, res) => {
     let pwd = req.body.pwd;
     let pwdHash = util.genHash(pwd);
     dm.getUserInfo(uid, result => {
-        if (result === undefined) {
+        if (result === undefined || result.isDeleted === 1) {
             let html = am.alertMsg('존재하지 않는 ID입니다.', '/');
             res.send(html);
         } else {

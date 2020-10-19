@@ -1,5 +1,5 @@
 module.exports = {
-    header: function(uname) {
+    header: function(uid, uname, title) {
         return `
         <!DOCTYPE html>
         <html lang="ko">
@@ -20,14 +20,24 @@ module.exports = {
                 </a>
                 <ul class="nav mr-auto">
                     <li class="nav-item">
-                        <a class="nav-link" style="color: white; margin-left: 5px;" href="/"><i class="fas fa-home" style="margin-right: 10px"></i>홈</a>
+                        <a class="nav-link" style="color: white; margin-left: 5px;" href="/bbs/list"><i class="fas fa-home" style="margin-right: 10px"></i>홈</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" style="color: white" href="/bbs/create">글 작성</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" style="color: white" href="/user/userInfo/${uid}">사용자 정보</a>
                     </li>
                     <li class="nav-item">
                         <a class="nav-link" style="color: white" href="/logout">로그아웃</a>
                     </li>
                 </ul>
+                <form class="form-inline mr-auto" action="/bbs/search/${title}">
+                    <input class="form-control mr-sm-2" type="text" placeholder="검색할 제목 입력">
+                    <button class="btn btn-outline-success" type="submit">검색</button>
+                </form>
                 <div class="navbar-text fixed-right" style="color:white;">
-                    ${uname}님 반갑습니다!
+                    '${uname}'님 반갑습니다!
                 </div>
             </nav>
         `;

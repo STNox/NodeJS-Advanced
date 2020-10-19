@@ -39,11 +39,42 @@ module.exports = {
         });
         conn.end();
     },
+    getUserList: function(callback) {
+        let conn = this.getConnection();
+        let sql = `SELECT uid, uname, tel, email FROM users WHERE isDeleted=0;`;
+        conn.query(sql, (error, rows, field) => {
+            if (error)
+                console.log(error);
+            callback(rows);
+        });
+        conn.end();
+    },
+    updateUser: function(params, callback) {
+        console.log(params);
+        let conn = this.getConnection();
+        let sql = `UPDATE users SET pwd=?, tel=?, email=?, uname=? WHERE uid LIKE ?;`;
+        conn.query(sql, params, (error, fields) => {
+            if (error)
+                console.log(error);
+            callback();
+        });
+        conn.end();
+    },
+    deleteUser: function(uid, callback) {
+        let conn = this.getConnection();
+        let sql = `UPDATE users SET isDeleted=1 WHERE uid LIKE ?;`;
+        conn.query(sql, uid, (error, fields) => {
+            if (error)
+                console.log(error);
+            callback();
+        });
+        conn.end();
+    },
     getBbsLists: function(callback) {       // 화살표 함수로 하면 동작 안 함
         let conn = this.getConnection();    // 파일 내 함수 불러오기 this.~
         let sql = `
         SELECT bid, title, uid, DATE_FORMAT(modTime, '%Y-%m-%d %T') AS regDate, viewCount FROM bbs 
-            WHERE isDeleted=0 ORDER BY regDate DESC LIMIT 10;`;
+            WHERE isDeleted=0 ORDER BY bid DESC LIMIT 10;`;
         conn.query(sql, (error, rows, field) => {
             if (error)
                 console.log(error);
@@ -64,7 +95,7 @@ module.exports = {
     getPost: function(bid, callback) {
         let conn = this.getConnection();
         let sql = `
-        SELECT b.bid, b.title, u.uid, u.uname, DATE_FORMAT(b.modTime, '%Y-%m-%d %T') AS modTime, b.content FROM bbs AS b
+        SELECT b.bid, b.title, u.uid, b.viewCount, u.uname, DATE_FORMAT(b.modTime, '%Y-%m-%d %T') AS modTime, b.content FROM bbs AS b
             JOIN users AS u
             ON b.uid=u.uid
             WHERE bid=?;
@@ -88,7 +119,7 @@ module.exports = {
     },
     deletePost: function(bid, callback) {
         let conn = this.getConnection();
-        let sql = 'DELETE FROM bbs WHERE bid=?;';
+        let sql = 'UPDATE bbs SET isDeleted=1 WHERE bid=?;';
         conn.query(sql, bid, (error, fields) => {
             if (error)
                 console.log(error);
@@ -138,6 +169,19 @@ module.exports = {
             callback();
         });
         conn.end();
+    },
+    search: function(title, callback) {
+        let conn = this.getConnection();
+        let sql = `
+        SELECT bid, uid, DATE_FORMAT(modTime, '%Y-%m-%d %T') AS regDate, viewCount FROM bbs
+            WHERE title LIKE ? AND isDeleted=0
+            ORDER BY bid DESC LIMIT 10;`;
+        conn.query(sql, title, (error, rows, field) => {
+            console.log(rows);
+            if (error)
+                console.log(error);
+            callback(rows);
+        });
     }
 }
 
