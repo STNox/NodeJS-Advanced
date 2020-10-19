@@ -64,14 +64,35 @@ module.exports = {
     getPost: function(bid, callback) {
         let conn = this.getConnection();
         let sql = `
-        SELECT b.bid, b.title, u.uname, DATE_FORMAT(b.modTime, '%Y-%m-%d %T') AS modTime, b.content FROM bbs AS b
+        SELECT b.bid, b.title, u.uid, u.uname, DATE_FORMAT(b.modTime, '%Y-%m-%d %T') AS modTime, b.content FROM bbs AS b
             JOIN users AS u
             ON b.uid=u.uid
-            WHERE bid=?;`;
+            WHERE bid=?;
+            `;
         conn.query(sql, bid, (error, results, fields) => {
             if (error)
                 console.log(error);
             callback(results[0]);
+        });
+        conn.end();
+    },
+    updatePost: function(params, callback) {
+        let conn = this.getConnection();
+        let sql = `UPDATE bbs SET title=?, content=? WHERE bid=?;`;
+        conn.query(sql, params, (error, fields) => {
+            if (error)
+                console.log(error);
+            callback();
+        });
+        conn.end();
+    },
+    deletePost: function(bid, callback) {
+        let conn = this.getConnection();
+        let sql = 'DELETE FROM bbs WHERE bid=?;';
+        conn.query(sql, bid, (error, fields) => {
+            if (error)
+                console.log(error);
+            callback();
         });
         conn.end();
     },
@@ -95,6 +116,26 @@ module.exports = {
             if (error)
                 console.log(error);
             callback(results);
+        });
+        conn.end();
+    },
+    viewCount: function(bid, callback) {
+        let conn = this.getConnection();
+        let sql = `UPDATE bbs SET viewCount=viewCount+1 WHERE bid=?;`;
+        conn.query(sql, bid, (error, fields) => {
+            if (error)
+                console.log(error);
+            callback();
+        });
+        conn.end();
+    },
+    modTime: function(bid, callback) {
+        let conn = this.getConnection();
+        let sql = `UPDATE bbs SET modTime=now() WHERE bid=?;`;
+        conn.query(sql, bid, (error, fields) => {
+            if (error)
+                console.log(error);
+            callback();
         });
         conn.end();
     }

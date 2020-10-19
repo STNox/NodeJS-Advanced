@@ -7,7 +7,7 @@ module.exports = {
             tableRow += `<tr>
                             <td style="padding-right: 20px; text-align: center;">${row.bid}</td>
                             <td style="padding-right: 20px; text-align: left;"><a href="/bbs/list/${row.bid}">${row.title}</a></td>
-                            <td style="padding-right: 20px; text-align: center;">${uname}</td>
+                            <td style="padding-right: 20px; text-align: center;">${row.uid}</td>
                             <td style="padding-right: 20px; text-align: center;">${row.regDate}</td>
                             <td style="padding-right: 20px; text-align: center;">${row.viewCount}</td>
                         </tr>
@@ -81,24 +81,12 @@ module.exports = {
         `;
     },
     postForm: function(uname, result, r_result) {
-        console.log(r_result);
-        let replyRow = '';
-        for (let row of r_result) {
-            replyRow += `
-            <table class="table-borderless table-sm">
-                <tr>
-                    <td>${row.uname}</td>
-                <tr>
-                <tr>
-                    <td>${row.content}</td>
-                </tr>
-            </table>
-            `;
-        }
+        console.log(result.uid);
         return `
         ${template.header(uname)}
         
         <div class="container" style="margin-top: 20px">
+            <input type="hidden" name="uid" value="${result.uid}">
             <table class="table table-striped table-sm">
                 <tr>
                     <td colspan="3" style="height: 10%">제목: ${result.title}</td>
@@ -117,24 +105,40 @@ module.exports = {
             </table>
             <hr>
             <div class="form-row float-right">
+                <button class="btn btn-primary" onclick="location.href='/bbs/update/${result.bid}/uid/${result.uid}'">수정</button> &nbsp;
+                <button class="btn btn-danger" onclick="location.href='/bbs/delete/${result.bid}/uid/${result.uid}'">삭제</button> &nbsp;
                 <button class="btn btn-secondary" onclick="location.href='/bbs/list'">글 목록</button>
             </div>
             <br><br>
-            <h4>댓글</h4>
-            ${replyRow}
-            <hr>
-            <form method="POST" action="/bbs/comment">
-                <input type="hidden" name="bid" value="${result.bid}">
-                <input type="hidden" name="uid" value="${r_result[0].uid}">
-                <table>
-                    <tr>
-                        <td><textarea style="resize: none" name="content" id="content" cols="100" rows="3"></textarea></td>
-                        <td><button type="submit" class="btn btn-primary">작성</td>
-                    </tr>
-                </table>
-            </form>
         </div>
+
         ${template.footer()}`
+    },
+    updateForm: function(result) {
+        return `
+        ${template.header(result.uname)}
+        
+        <div class="container" style="margin-top: 20px">
+        <form action="/update" method="POST">
+            <input type="hidden" name="uid" value="${result.uid}">
+            <table>
+                <tr>
+                    <td><label for="title">제목</label></td>
+                    <td><input type="text" name="title" id="title" value="${result.title}"></td>
+                </tr>
+                <tr>
+                    <td><label for="content">내용</label></td>
+                    <td><input type="text" name="content" id="content" value="${result.content}"></td>
+                </tr>
+                <tr>
+                    <td colspan="2"><input type="submit" value="수정"></td>
+                </tr>
+            </table>
+        </form>
+        </div>
+
+        ${template.footer()}
+        `
     } //댓글 폼과 게시글 폼 분리
     //update bbs set viewCount=viewCount+1 where bid = 1001;
 }
