@@ -33,9 +33,11 @@ bbsRouter.post('/create', (req, res) => {
 bbsRouter.get('/list/:bid', (req, res) => {
     dm.getPost(req.params.bid, result => {
         dm.viewCount(req.params.bid, () => {
-            const view = require('./view/BBS');
-            let html = view.postForm(req.session, result);
-            res.send(html);
+            dm.getReply(req.params.bid, r_result => {
+                const view = require('./view/BBS');
+                let html = view.postForm(req.session, result, r_result);
+                res.send(html);
+            });
         });
     });
 });
@@ -78,11 +80,17 @@ bbsRouter.get('/delete/:bid/uid/:uid', util.isLoggedIn, (req, res) => {
     }
 });
 
-bbsRouter.get('/search/:title', util.isLoggedIn, (req, res) => {
-    dm.search(req.params.title, rows => {
-        const view = require('./view/BBS');
-        let html = view.searchList(req.session, rows);
-        res.send(html);
+bbsRouter.post('/search', util.isLoggedIn, (req, res) => {
+    let title = req.body.title;
+    dm.search(title, rows => {
+        if (rows.length < 1) {
+            let html = am.alertMsg('검색결과가 없습니다.', '/bbs/list');
+            res.send(html);
+        } else {
+            const view = require('./view/BBS');
+            let html = view.searchList(req.session, rows);
+            res.send(html);
+        }
     });
 });
 

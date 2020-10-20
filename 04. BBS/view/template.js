@@ -32,8 +32,8 @@ module.exports = {
                         <a class="nav-link" style="color: white" href="/logout">로그아웃</a>
                     </li>
                 </ul>
-                <form class="form-inline mr-auto" action="/bbs/search/${title}">
-                    <input class="form-control mr-sm-2" type="text" placeholder="검색할 제목 입력">
+                <form class="form-inline mr-auto" method="post" action="/bbs/search">
+                    <input class="form-control mr-sm-2" name="title" id="title" type="text" placeholder="검색할 제목 입력">
                     <button class="btn btn-outline-success" type="submit">검색</button>
                 </form>
                 <div class="navbar-text fixed-right" style="color:white;">

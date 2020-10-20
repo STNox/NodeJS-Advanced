@@ -79,39 +79,73 @@ module.exports = {
         `;
     },
     postForm: function(userInfo, result, r_result) {
-        console.log(result.uid);
-        return `
-        ${template.header(userInfo.uid, userInfo.uname)}
-        
-        <div class="container" style="margin-top: 20px">
-            <input type="hidden" name="uid" value="${result.uid}">
-            <table class="table table-striped table-sm">
-                <tr>
-                    <td colspan="4" style="height: 10%">제목: ${result.title}</td>
-                </tr>
-                <tr>
-                    <td>글 번호: ${result.bid}</td>
-                    <td style="text-align: center">작성자: ${result.uname}</td>
-                    <td style="text-align: right">작성 시간: ${result.modTime}</td>
-                    <td style="text-align: right">조회 수: ${result.viewCount}</td>
-                </tr>
-                <tr>
-                    <td colspan="4"></td>
-                </tr>
-                <tr>
-                    <td colspan="4">${result.content}</td>
-                </tr>
-            </table>
-            <hr>
-            <div class="form-row float-right">
-                <button class="btn btn-primary" onclick="location.href='/bbs/update/${result.bid}/uid/${result.uid}'">수정</button> &nbsp;
-                <button class="btn btn-danger" onclick="location.href='/bbs/delete/${result.bid}/uid/${result.uid}'">삭제</button> &nbsp;
-                <button class="btn btn-secondary" onclick="location.href='/bbs/list'">글 목록</button>
+        if (userInfo.uid === result.uid) {
+            return `
+            ${template.header(userInfo.uid, userInfo.uname)}
+            
+            <div class="container" style="margin-top: 20px">
+                <input type="hidden" name="uid" value="${result.uid}">
+                <table class="table table-striped table-sm">
+                    <tr>
+                        <td colspan="4" style="height: 10%">제목: ${result.title}</td>
+                    </tr>
+                    <tr>
+                        <td>글 번호: ${result.bid}</td>
+                        <td style="text-align: center">작성자: ${result.uname}</td>
+                        <td style="text-align: right">작성 시간: ${result.modTime}</td>
+                        <td style="text-align: right">조회 수: ${result.viewCount}</td>
+                    </tr>
+                    <tr>
+                        <td colspan="4"></td>
+                    </tr>
+                    <tr>
+                        <td colspan="4">${result.content}</td>
+                    </tr>
+                </table>
+                <hr>
+                <div class="form-row float-right">
+                    <button class="btn btn-primary" onclick="location.href='/bbs/update/${result.bid}/uid/${result.uid}'">수정</button> &nbsp;
+                    <button class="btn btn-danger" onclick="location.href='/bbs/delete/${result.bid}/uid/${result.uid}'">삭제</button> &nbsp;
+                    <button class="btn btn-secondary" onclick="location.href='/bbs/list'">글 목록</button>
+                </div>
+                <br><br>
+                ${this.replyForm(result, r_result)}
             </div>
-            <br><br>
-        </div>
-
-        ${template.footer()}`
+    
+            ${template.footer()}`
+        } else {
+            return `
+            ${template.header(userInfo.uid, userInfo.uname)}
+            
+            <div class="container" style="margin-top: 20px">
+                <input type="hidden" name="uid" value="${result.uid}">
+                <table class="table table-striped table-sm">
+                    <tr>
+                        <td colspan="4" style="height: 10%">제목: ${result.title}</td>
+                    </tr>
+                    <tr>
+                        <td>글 번호: ${result.bid}</td>
+                        <td style="text-align: center">작성자: ${result.uname}</td>
+                        <td style="text-align: right">작성 시간: ${result.modTime}</td>
+                        <td style="text-align: right">조회 수: ${result.viewCount}</td>
+                    </tr>
+                    <tr>
+                        <td colspan="4"></td>
+                    </tr>
+                    <tr>
+                        <td colspan="4">${result.content}</td>
+                    </tr>
+                </table>
+                <hr>
+                <div class="form-row float-right">
+                    <button class="btn btn-secondary" onclick="location.href='/bbs/list'">글 목록</button>
+                </div>
+                <br><br>
+                ${this.replyForm(result, r_result)}
+            </div>
+    
+            ${template.footer()}`
+        }
     },
     updateForm: function(result) {
         return `
@@ -181,6 +215,24 @@ module.exports = {
         </div>
         ${template.footer()}
         `;
+    },
+    replyForm: function(result, r_result) {
+        let tableRow = '';
+        if (r_result.bid === result.bid) {
+            for (let row of r_result) {
+                tableRow += `<tr>
+                                <td style="padding-right: 20px; text-align: right;">${row.uid}</td>
+                                <td style="padding-right: 20px; text-align: right;">${row.content}</td>
+                            </tr>
+                            `;
+            } 
+            return `
+            <table class="border">
+                ${tableRow}
+            </table>`
+        } else {
+            return `${tableRow}`
+        }
     } //댓글 폼과 게시글 폼 분리
     //update bbs set viewCount=viewCount+1 where bid = 1001;
 }
