@@ -95,13 +95,15 @@ bbsRouter.post('/search', util.isLoggedIn, (req, res) => {
 });
 
 
-bbsRouter.post('/comment', (req, res) => {
+bbsRouter.post('/reply', (req, res) => {
     let bid = req.body.bid;
-    let uid = req.body.uid;
+    let uid = req.session.uid;
     let content = req.body.content;
     let params = [bid, uid, content];
     dm.regReply(params, function() {
-        res.redirect(`/bbs/list/${bid}`);
+        dm.replyCount(bid, () => {
+            res.redirect(`/bbs/list/${bid}`);
+        });
     });
 });
 

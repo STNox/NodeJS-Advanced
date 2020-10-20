@@ -73,8 +73,9 @@ module.exports = {
     getBbsLists: function(callback) {       // 화살표 함수로 하면 동작 안 함
         let conn = this.getConnection();    // 파일 내 함수 불러오기 this.~
         let sql = `
-        SELECT bid, title, uid, IF(DATE(modTime)>=DATE_SUB(NOW(), INTERVAL 1 DAY), DATE_FORMAT(modTime, '%T'), DATE_FORMAT(modTime, '%Y-%m-%d')) AS regDate, viewCount FROM bbs 
-            WHERE isDeleted=0 ORDER BY bid DESC LIMIT 10;`;
+        SELECT bid, title, bbs.uid, users.uname, IF(DATE(modTime)>=DATE_SUB(NOW(), INTERVAL 1 DAY), DATE_FORMAT(modTime, '%T'), DATE_FORMAT(modTime, '%Y-%m-%d')) AS regDate, viewCount, replyCount FROM bbs 
+            JOIN users ON users.uid=bbs.uid
+            WHERE bbs.isDeleted=0 ORDER BY bid DESC LIMIT 10;`;
         conn.query(sql, (error, rows, field) => {
             console.log(rows);
             if (error)
@@ -141,7 +142,7 @@ module.exports = {
     getReply: function(bid, callback) {
         let conn = this.getConnection();
         let sql = `
-        SELECT r.bid, u.uname, DATE_FORMAT(r.regTime, '%Y-%m-%d %T') AS regTime, r.content, r.isMine FROM reply AS r
+        SELECT r.bid, r.rid, u.uname, DATE_FORMAT(r.regTime, '%Y-%m-%d %T') AS regTime, r.content, r.isMine FROM reply AS r
             JOIN users AS u ON r.uid=u.uid
             WHERE r.bid=?;`;
         conn.query(sql, bid, (error, results, fields) => {
@@ -155,6 +156,26 @@ module.exports = {
         let conn = this.getConnection();
         let sql = `UPDATE bbs SET viewCount=viewCount+1 WHERE bid=?;`;
         conn.query(sql, bid, (error, fields) => {
+            if (error)
+                console.log(error);
+            callback();
+        });
+        conn.end();
+    },
+    replyCount: function(bid, callback) {
+        let conn = this.getConnection();
+        let sql = `UPDATE bbs SET replyCount=replyCount+1 WHERE bid=?;`;
+        conn.query(sql, bid, (error, field) => {
+            if (error)
+                console.log(error);
+            callback();
+        });
+        conn.end();
+    },
+    myReply: function(uid, callback) {
+        let conn = this.getConnection();
+        let sql = `UPDATE reply SET isMine=isMine+1 WHERE uid=?;`;
+        conn.query(sql, uid, (error, field) => {
             if (error)
                 console.log(error);
             callback();
@@ -175,7 +196,7 @@ module.exports = {
         console.log(title);
         let conn = this.getConnection();
         let sql = `
-        SELECT bid, uid, title, DATE_FORMAT(modTime, '%Y-%m-%d %T') AS regDate, viewCount FROM bbs
+        SELECT bid, uid, title, DATE_FORMAT(modTime, '%Y-%m-%d %T') AS regDate, viewCount, replyCount FROM bbs
             WHERE title LIKE ? AND isDeleted=0
             ORDER BY bid DESC LIMIT 10;`;
         conn.query(sql, `%${title}%`, (error, rows, field) => {
