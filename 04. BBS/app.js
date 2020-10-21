@@ -34,20 +34,26 @@ app.get('/', (req, res) => {
     });
 });
 
+app.get('/home', (req, res) => {
+    const view = require('./view/template');
+    let html = view.loginHome(req.session.uid, req.session.uname);
+    res.send(html);
+});
+
 app.post('/login', (req, res) => {
     let uid = req.body.uid;
     let pwd = req.body.pwd;
     let pwdHash = util.genHash(pwd);
     dm.getUserInfo(uid, result => {
         if (result === undefined || result.isDeleted === 1) {
-            let html = am.alertMsg('존재하지 않는 ID입니다.', '/');
+            let html = am.alertMsg('존재하지 않거나 삭제된 ID입니다.', '/');
             res.send(html);
         } else {
             if (result.pwd === pwdHash) {
                 req.session.uid = uid;
                 req.session.uname = result.uname;
                 req.session.save(function() {
-                    res.redirect('/bbs/list/1');
+                    res.redirect('/home');
                 });
             } else {
                 let html = am.alertMsg('패스워드가 일치하지 않습니다.', '/');

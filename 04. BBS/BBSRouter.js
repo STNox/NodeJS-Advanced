@@ -43,11 +43,11 @@ bbsRouter.post('/create', (req, res) => {
     let content = req.body.content;
     let params = [uid, title, content];
     dm.regPost(params, function() {
-        res.redirect('/bbs/list');
+        res.redirect('/bbs/list/1');
     });
 });
 
-bbsRouter.get('/list/:bid', (req, res) => {
+bbsRouter.get('/list/post/:bid', (req, res) => {
     dm.getPost(req.params.bid, result => {
         dm.viewCount(req.params.bid, () => {
             dm.getReply(req.params.bid, r_result => {
@@ -70,7 +70,7 @@ bbsRouter.get('/update/:bid/uid/:uid', util.isLoggedIn, (req, res) => {
             });
         });
     } else {
-        let html = am.alertMsg('수정 권한이 없습니다.', '/bbs/list');
+        let html = am.alertMsg('수정 권한이 없습니다.', '/bbs/list/1');
         res.send(html);
     }
 });
@@ -82,17 +82,17 @@ bbsRouter.post('/update', util.isLoggedIn, (req, res) => {
     let params = [title, content, bid];
     console.log(params);
     dm.updatePost(params, () => {
-        res.redirect('/bbs/list');
+        res.redirect('/bbs/list/1');
     });
 });
 
 bbsRouter.get('/delete/:bid/uid/:uid', util.isLoggedIn, (req, res) => {
     if (req.params.uid === req.session.uid) {
         dm.deletePost(req.params.bid, () => {
-            res.redirect('/bbs/list');
+            res.redirect('/bbs/list/1');
         });
     } else {
-        let html = am.alertMsg('삭제 권한이 없습니다.', '/bbs/list');
+        let html = am.alertMsg('삭제 권한이 없습니다.', '/bbs/list/1');
         res.send(html);
     }
 });
@@ -119,7 +119,7 @@ bbsRouter.post('/reply', (req, res) => {
     let params = [bid, uid, content];
     dm.regReply(params, function() {
         dm.replyCount(bid, () => {
-            res.redirect(`/bbs/list/${bid}`);
+            res.redirect(`/bbs/list/post/${bid}`);
         });
     });
 });

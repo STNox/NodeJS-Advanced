@@ -3,8 +3,23 @@ const template = require('./template')
 module.exports = {
     register: function() {
         return `
-        ${template.header()}
-
+        <!DOCTYPE html>
+        <html lang="ko">
+        <head>
+            <title>Music Studio</title>
+            <meta charset="utf-8">
+            <meta name="viewport" content="width=device-width, initial-scale=1">
+            <link rel="stylesheet" href="/bootstrap/css/bootstrap.min.css">
+            <link rel="stylesheet" href="/fontawesome-free-5.15.1-web/css/all.min.css"
+            <script src="/jquery/jquery.min.js"></script>
+            <script src="/popper/popper.min.js"></script>
+            <script src="/bootstrap/js/bootstrap.min.js"></script>
+            <style type="text/CSS">
+                a:link{color: black; text-decoration: none;}
+                a:visited{color: grey; text-decoration: none;}
+            </style>
+        </head>
+        <body>
         <div class="container" style="margin-top: 90px">  
             <div class="container">
                 <div class="row">
@@ -14,22 +29,23 @@ module.exports = {
                     </div>
                     <div class="col-3"></div>
                     <div class="col-6">
+                        <p class="text-danger">*는 필수정보입니다.</p>
                         <form action="/user/register" method="post">
                             <table class="table table-borderless">
                                 <tr>
-                                    <td><label for="uid">사용자 ID</label></td>
+                                    <td><label for="uid">사용자 ID*</label></td>
                                     <td><input type="text" name="uid" id="uid"></td>
                                 </tr>
                                 <tr>
-                                    <td><label for="pwd">패스워드</label></td>
+                                    <td><label for="pwd">패스워드*</label></td>
                                     <td><input type="password" name="pwd" id="pwd"></td>
                                 </tr>
                                 <tr>
-                                    <td><label for="pwd2">패스워드 확인</label></td>
+                                    <td><label for="pwd2">패스워드 확인*</label></td>
                                     <td><input type="password" name="pwd2" id="pwd2"></td>
                                 </tr>
                                 <tr>
-                                    <td><label for="uname">사용자 이름</label></td>
+                                    <td><label for="uname">사용자 이름*</label></td>
                                     <td><input type="text" name="uname" id="uname"></td>
                                 </tr>
                                 <tr>
@@ -43,13 +59,15 @@ module.exports = {
                                 <tr>
                                     <td colspan="2" style="text-align: center;">
                                         <input class="btn btn-primary" type="submit" value="제출">
-                                        <input class="btn btn-secondary" type="reset" value="취소">
+                                        <input class="btn btn-secondary" type="reset" value="내용 전체 삭제">
                                     </td>
                                 </tr>
                             </table>
                         </form>
                     </div>
-                    <div class="col-3"></div>
+                    <div class="col-3">
+                        <button class="btn btn-info" onclick="location.href='/'">초기 화면으로</button>
+                    </div>
                 </div>
             </div>
         </div>
@@ -90,7 +108,7 @@ module.exports = {
                         <tr>
                             <td colspan="2" style="text-align: center;">
                                 <button class="btn btn-primary" onclick="location.href='/user/update/${result.uid}'">수정</button>
-                                <button class="btn btn-secondary" onclick="location.href='/bbs/list'">돌아가기</button>
+                                <button class="btn btn-secondary" onclick="location.href='/bbs/list/1'">돌아가기</button>
                             </td>
                         </tr>
                         <tr>
@@ -186,11 +204,11 @@ module.exports = {
                                 <tr>
                                     <td colspan="2" style="text-align: center;">
                                         <input class="btn btn-primary" type="submit" value="완료">
-                                        <input class="btn btn-secondary" type="reset" value="취소">
                                     </td>
                                 </tr>
                             </table>
                         </form>
+                        <button class="btn btn-secondary float-right" onclick="location.href='/bbs/list/1'">돌아가기</button>
                     </div>
                     <div class="col-3"></div>
                 </div>

@@ -6,7 +6,7 @@ module.exports = {
         for (let row of rows) {
             tableRow += `<tr>
                             <td style="padding-right: 20px; text-align: center;">${row.bid}</td>
-                            <td style="padding-right: 20px; text-align: left;"><a href="/bbs/list/${row.bid}">${row.title} [${row.replyCount}]</a></td>
+                            <td style="padding-right: 20px; text-align: left;"><a href="/bbs/list/post/${row.bid}">${row.title} [${row.replyCount}]</a></td>
                             <td style="padding-right: 20px; text-align: center;">${row.uname}</td>
                             <td style="padding-right: 20px; text-align: center;">${row.regDate}</td>
                             <td style="padding-right: 20px; text-align: center;">${row.viewCount}</td>
@@ -42,7 +42,7 @@ module.exports = {
             <div class="row">
                 <div class="col-1"></div>
                 <div class="col-10">
-                    <h3>게시글 목록</h3>
+                    <h3>게시판</h3>
                     <table class="table table-striped" style="margin-top: 20px">
                         <thead>
                             <tr>    
@@ -85,11 +85,11 @@ module.exports = {
                 <table class="table-borderless">
                     <input type="hidden" name="uid" value="${uid}">
                     <tr>
-                        <td><label for="title">제목</label></td>
+                        <td><label for="title" style="margin-right: 10px">제목</label></td>
                         <td><input type="text" name="title" id="title" size="100"></td>
                     </tr>
                     <tr>
-                        <td><label for="content">내용</label></td>
+                        <td><label for="content" style="margin-right: 10px">내용</label></td>
                         <td><textarea style="resize: none" name="content" id="content" cols="140" rows="15"></textarea></td>
                     </tr>
                     <tr>
@@ -104,15 +104,16 @@ module.exports = {
         `;
     },
     postForm: function(userInfo, result, r_result) {
+        result.content = result.content.replace(/\n/g, '<br>');
         if (userInfo.uid === result.uid) {
             return `
             ${template.header(userInfo.uid, userInfo.uname)}
             
-            <div class="container" style="margin-top: 20px">
+            <div class="container" style="margin-top: 100px">
                 <input type="hidden" name="uid" value="${result.uid}">
                 <table class="table table-striped table-sm">
                     <tr>
-                        <td colspan="4" style="height: 10%">제목: ${result.title}</td>
+                        <td colspan="4" style="font-size: 30px">제목: ${result.title}</td>
                     </tr>
                     <tr>
                         <td>글 번호: ${result.bid}</td>
@@ -131,12 +132,12 @@ module.exports = {
                 <div class="form-row float-right">
                     <button class="btn btn-outline-primary" data-toggle="tooltip" title="수정" data-placement="bottom" onclick="location.href='/bbs/update/${result.bid}/uid/${result.uid}'"><i class="fas fa-wrench"></i></button> &nbsp;
                     <button class="btn btn-outline-danger" data-toggle="tooltip" title="삭제" data-placement="bottom" onclick="location.href='/bbs/delete/${result.bid}/uid/${result.uid}'"><i class="far fa-trash-alt"></i></button> &nbsp;
-                    <button class="btn btn-outline-secondary" data-toggle="tooltip" title="목록" data-placement="bottom" onclick="location.href='/bbs/list'"><i class="far fa-list-alt"></i></button>
+                    <button class="btn btn-outline-secondary" data-toggle="tooltip" title="목록" data-placement="bottom" onclick="location.href='/bbs/list/1'"><i class="far fa-list-alt"></i></button>
                 </div>
                 <br><br>
                 <h4>댓글</h4>
                 <hr>
-                <div class="container border">
+                <div class="container border bg-light">
                     ${this.replyForm(result, r_result)}
                 <br>
                 </div>
@@ -179,12 +180,12 @@ module.exports = {
                 </table>
                 <hr>
                 <div class="form-row float-right">
-                <button class="btn btn-outline-secondary" data-toggle="tooltip" title="목록" data-placement="bottom" onclick="location.href='/bbs/list'"><i class="far fa-list-alt"></i></button>
+                <button class="btn btn-outline-secondary" data-toggle="tooltip" title="목록" data-placement="bottom" onclick="location.href='/bbs/list/1'"><i class="far fa-list-alt"></i></button>
                 </div>
                 <br><br>
                 <h4>댓글</h4>
                 <hr>
-                <div class="container border">
+                <div class="container border bg-light">
                     ${this.replyForm(result, r_result)}
                 <br>
                 </div>
@@ -214,11 +215,11 @@ module.exports = {
             <input type="hidden" name="bid" value="${result.bid}">
             <table>
                 <tr>
-                    <td><label for="title">제목</label></td>
+                    <td><label for="title" style="margin-right: 10px">제목</label></td>
                     <td><input type="text" name="title" id="title" style="width: 400px" value="${result.title}"></td>
                 </tr>
                 <tr>
-                    <td><label for="content">내용</label></td>
+                    <td><label for="content" style="margin-right: 10px">내용</label></td>
                     <td><input type="text" name="content" id="content" style="width: 800px; height: 400px" value="${result.content}"></td>
                 </tr>
                 <tr>
@@ -236,8 +237,8 @@ module.exports = {
         for (let row of rows) {
             tableRow += `<tr>
                             <td style="padding-right: 20px; text-align: center;">${row.bid}</td>
-                            <td style="padding-right: 20px; text-align: left;"><a href="/bbs/list/${row.bid}">${row.title} [${row.replyCount}]</a></td>
-                            <td style="padding-right: 20px; text-align: center;">${row.uid}</td>
+                            <td style="padding-right: 20px; text-align: left;"><a href="/bbs/list/post/${row.bid}">${row.title} [${row.replyCount}]</a></td>
+                            <td style="padding-right: 20px; text-align: center;">${row.uname}</td>
                             <td style="padding-right: 20px; text-align: center;">${row.regDate}</td>
                             <td style="padding-right: 20px; text-align: center;">${row.viewCount}</td>
                         </tr>
@@ -277,13 +278,13 @@ module.exports = {
         console.log(r_result);
         let tableRow = '';
         for (let row of r_result) {
-            tableRow += `<table>
+            tableRow += `<table cellpadding="7">
                             <tr>
                                 <td style="padding-right: 20px; text-align: center;">${row.uname}</td>
                                 <td style="padding-right: 20px; text-align: right;">${row.regTime}</td>
                             </tr><br>
                             <tr>
-                                <td class="border" colspan="2" style="padding-right: 20px; text-align: auto;">${row.content}</td>
+                                <td class="border bg-white" colspan="2" style="; padding-right: 20px; text-align: auto;">${row.content}</td>
                             </tr>
                         </table>
                         `;

@@ -207,8 +207,9 @@ module.exports = {
         console.log(title);
         let conn = this.getConnection();
         let sql = `
-        SELECT bid, uid, title, DATE_FORMAT(modTime, '%Y-%m-%d %T') AS regDate, viewCount, replyCount FROM bbs
-            WHERE title LIKE ? AND isDeleted=0
+        SELECT bid, bbs.uid, users.uname, title, DATE_FORMAT(modTime, '%Y-%m-%d %T') AS regDate, viewCount, replyCount FROM bbs
+            JOIN users ON users.uid=bbs.uid
+            WHERE title LIKE ? AND bbs.isDeleted=0
             ORDER BY bid DESC LIMIT 10;`;
         conn.query(sql, `%${title}%`, (error, rows, field) => {
             console.log(rows);

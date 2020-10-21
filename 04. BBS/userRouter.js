@@ -20,16 +20,22 @@ userRouter.post('/register', (req, res) => {
     let uname = req.body.uname;
     let tel = req.body.tel;
     let email = req.body.email;
-    if (pwd === pwd2) {
-        let pwdHash = util.genHash(pwd);
-        let params = [uid, pwdHash, tel, email, uname];
-        dm.regUser(params, function() {
-            let html = am.alertMsg('등록한 정보로 로그인해주십시오.', '/');
-            res.send(html);
-        });
-    } else {
-        let html = am.alertMsg('패스워드가 일치하지 않습니다.', '/register');
+    if (uid === '' || pwd === '' || pwd2 === '' || uname === '') {
+        let html = am.alertMsg('필수 정보를 입력하십시오', '/user/register');
         res.send(html);
+    } else{
+        if (pwd === pwd2) {
+            let pwdHash = util.genHash(pwd);
+            let params = [uid, pwdHash, tel, email, uname];
+            console.log(params);
+            dm.regUser(params, function() {
+                let html = am.alertMsg('등록한 정보로 로그인해주십시오.', '/');
+                res.send(html);
+            });
+        } else {
+            let html = am.alertMsg('패스워드가 일치하지 않습니다.', '/user/register');
+            res.send(html);
+        }
     }
 });
 
@@ -74,7 +80,7 @@ userRouter.post('/update', (req, res) => {
             res.send(html);
         });
     } else {
-        let html = am.alertMsg('패스워드가 일치하지 않습니다.', '/update');
+        let html = am.alertMsg('패스워드가 일치하지 않습니다.', `/update/${uid}`);
         res.send(html);
     }
 });
