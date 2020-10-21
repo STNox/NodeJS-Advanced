@@ -1,7 +1,7 @@
 const template = require('./template');
 
 module.exports = {
-    bbsList:  function(userInfo, rows) {
+    bbsList:  function(userInfo, rows, pageNo, startPage, endPage, totalPage) {
         let tableRow = '';
         for (let row of rows) {
             tableRow += `<tr>
@@ -13,6 +13,28 @@ module.exports = {
                         </tr>
                         `;
         }
+
+        let leftPage = (pageNo > 10) ? `/bbs/list/${Math.floor(pageNo / 10) * 10}` : '#';
+        let pages = `<li class="page-item">
+                        <a class="page-link active" href="${leftPage}" aria-label="Previous">
+                        <span aria-hidden="true">&laquo;</span></a>
+                    </li>`;
+        for (let page = startPage; page <= endPage; page++) {
+            if (page === pageNo)
+                pages += `<li class="page-item active" aria-current="page">
+                            <span class="page-link">
+                                ${page}<span class="sr-only">(current)</span>
+                            </span>
+                        </li>`;
+            else
+                pages += `<li class="page-item"><a class="page-link" href="/bbs/list/${page}">${page}</a></li>`;
+        }
+
+        let rightPage = (endPage < totalPage) ? `/bbs/list/${Math.ceil(pageNo / 10) * 10 + 1}` : '#';
+        pages += `<li class="page-item">
+                    <a class="page-link" href="${rightPage}" aria-label="Next">
+                    <span aria-hidden="true">&raquo;</span></a>
+                </li>`;
         return `
         ${template.header(userInfo.uid, userInfo.uname)}
     
@@ -38,16 +60,12 @@ module.exports = {
                     <table class="table borderless">
                         <tr style="text-align: right">
                             <td>
-                                <button class="btn btn-secondary" onclick="location.href='/bbs/create'">글쓰기</button>
+                                <button class="btn btn-secondary" onclick="location.href='/bbs/create'"><i class="fas fa-pencil-alt" style="margin-right: 10px"></i>글쓰기</button>
                             </td>
                         </tr>
                     </table>
                     <ul class="pagination justify-content-center">
-                        <li class="page-item"><a class="page-link" href="#"><</a></li>
-                        <li class="page-item"><a class="page-link" href="#">1</a></li>
-                        <li class="page-item active"><a class="page-link" href="#">2</a></li>
-                        <li class="page-item"><a class="page-link" href="#">3</a></li>
-                        <li class="page-item"><a class="page-link" href="#">></a></li>
+                        ${pages}
                     </ul>
                 </div>
                 <div class="col-1">
@@ -274,6 +292,7 @@ module.exports = {
             }     
         }
         return `${tableRow}`;
-    } //댓글 폼과 게시글 폼 분리
+    }
+     //댓글 폼과 게시글 폼 분리
     //update bbs set viewCount=viewCount+1 where bid = 1001;
 }

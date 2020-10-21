@@ -47,7 +47,7 @@ app.post('/login', (req, res) => {
                 req.session.uid = uid;
                 req.session.uname = result.uname;
                 req.session.save(function() {
-                    res.redirect('/bbs/list');
+                    res.redirect('/bbs/list/1');
                 });
             } else {
                 let html = am.alertMsg('패스워드가 일치하지 않습니다.', '/');

@@ -1,4 +1,5 @@
 const fs = require('fs');
+const { connect } = require('http2');
 const mysql = require('mysql');
 
 let info = fs.readFileSync('./mysql.json', 'utf-8');
@@ -70,17 +71,27 @@ module.exports = {
         });
         conn.end();
     },
-    getBbsLists: function(callback) {       // 화살표 함수로 하면 동작 안 함
+    getBbsLists: function(offset, callback) {       // 화살표 함수로 하면 동작 안 함
         let conn = this.getConnection();    // 파일 내 함수 불러오기 this.~
         let sql = `
         SELECT bid, title, bbs.uid, users.uname, IF(DATE(modTime)>=DATE_SUB(NOW(), INTERVAL 1 DAY), DATE_FORMAT(modTime, '%T'), DATE_FORMAT(modTime, '%Y-%m-%d')) AS regDate, viewCount, replyCount FROM bbs 
             JOIN users ON users.uid=bbs.uid
-            WHERE bbs.isDeleted=0 ORDER BY bid DESC LIMIT 10;`;
-        conn.query(sql, (error, rows, field) => {
+            WHERE bbs.isDeleted=0 ORDER BY bid DESC LIMIT 10 OFFSET ?;`;
+        conn.query(sql, offset, (error, rows, field) => {
             console.log(rows);
             if (error)
                 console.log(error);
             callback(rows);
+        });
+        conn.end();
+    },
+    getTotalBbsCount: function(callback) {
+        let conn = this.getConnection();
+        let sql = `SELECT COUNT(*) AS count FROM bbs WHERE isDeleted=0;`;
+        conn.query(sql, (error, results, field) => {
+            if (error)
+                console.log(error)
+            callback(results[0]);
         });
         conn.end();
     },

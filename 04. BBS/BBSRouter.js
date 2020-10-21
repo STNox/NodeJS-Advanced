@@ -6,11 +6,28 @@ const util = require('./util');
 
 const bbsRouter = express.Router();
 
-bbsRouter.get('/list', util.isLoggedIn, (req, res) => {
+/* bbsRouter.get('/list', util.isLoggedIn, (req, res) => {
     dm.getBbsLists(rows => {
         const view = require('./view/BBS');
         let html = view.bbsList(req.session, rows);
         res.send(html);
+    });
+}); */
+
+bbsRouter.get('/list/:page', util.isLoggedIn, (req, res) => {
+    let page = parseInt(req.params.page);
+    req.session.currentPage = page;
+    let offset = (page - 1) * 10;
+    dm.getTotalBbsCount(result => {
+        let totalPage = Math.ceil(result.count / 10);
+        let startPage = Math.floor((page - 1) / 10) * 10 + 1;
+        let endPage = Math.ceil(page / 10) * 10;
+        endPage = (endPage > totalPage) ? totalPage : endPage;
+        dm.getBbsLists(offset, rows => {
+            const view = require('./view/BBS');
+            let html = view.bbsList(req.session, rows, page, startPage, endPage, totalPage);
+            res.send(html);
+        });
     });
 });
 

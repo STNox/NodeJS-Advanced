@@ -23,7 +23,7 @@ module.exports = {
                         <a class="nav-link" style="color: white; margin-left: 5px;" href="/bbs/list"><i class="fas fa-home" style="margin-right: 10px"></i>홈</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" style="color: white" href="/bbs/create"><i class="fas fa-pen" style="margin-right: 10px"></i>글 작성</a>
+                        <a class="nav-link" style="color: white" href="/bbs/create"><i class="fas fa-pencil-alt" style="margin-right: 10px"></i>글 작성</a>
                     </li>
                     <li class="nav-item">
                         <a class="nav-link" style="color: white" href="/user/userInfo/${uid}"><i class="fas fa-user" style="margin-right: 10px"></i>사용자 정보</a>
