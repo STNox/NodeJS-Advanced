@@ -22,7 +22,7 @@ module.exports = {
     },
     regUser: function(params, callback){
         let conn = this.getConnection();
-        let sql = `INSERT INTO users(uid, pwd, tel, email, uname) VALUES(?, ?, ?, ?, ?);`;
+        let sql = `INSERT INTO users(uid, pwd, tel, email, uname, photo) VALUES(?, ?, ?, ?, ?, ?);`;
         conn.query(sql, params, (error, fields) => {
             if (error)
                 console.log(error);
@@ -42,7 +42,7 @@ module.exports = {
     },
     getUserList: function(callback) {
         let conn = this.getConnection();
-        let sql = `SELECT uid, uname, tel, email FROM users WHERE isDeleted=0;`;
+        let sql = `SELECT uid, uname, tel, email, photo, FROM users WHERE isDeleted=0;`;
         conn.query(sql, (error, rows, field) => {
             if (error)
                 console.log(error);
@@ -53,7 +53,7 @@ module.exports = {
     updateUser: function(params, callback) {
         console.log(params);
         let conn = this.getConnection();
-        let sql = `UPDATE users SET pwd=?, tel=?, email=?, uname=? WHERE uid LIKE ?;`;
+        let sql = `UPDATE users SET pwd=?, tel=?, email=?, uname=?, photo=? WHERE uid LIKE ?;`;
         conn.query(sql, params, (error, fields) => {
             if (error)
                 console.log(error);
@@ -74,7 +74,7 @@ module.exports = {
     getBbsLists: function(offset, callback) {       // 화살표 함수로 하면 동작 안 함
         let conn = this.getConnection();    // 파일 내 함수 불러오기 this.~
         let sql = `
-        SELECT bid, title, bbs.uid, users.uname, IF(DATE(modTime)>=DATE_SUB(NOW(), INTERVAL 1 DAY), DATE_FORMAT(modTime, '%T'), DATE_FORMAT(modTime, '%Y-%m-%d')) AS regDate, viewCount, replyCount FROM bbs 
+        SELECT bid, title, bbs.uid, users.uname, users.photo, IF(DATE(modTime)>=DATE_SUB(NOW(), INTERVAL 1 DAY), DATE_FORMAT(modTime, '%T'), DATE_FORMAT(modTime, '%Y-%m-%d')) AS regDate, viewCount, replyCount FROM bbs 
             JOIN users ON users.uid=bbs.uid
             WHERE bbs.isDeleted=0 ORDER BY bid DESC LIMIT 10 OFFSET ?;`;
         conn.query(sql, offset, (error, rows, field) => {
@@ -108,7 +108,7 @@ module.exports = {
     getPost: function(bid, callback) {
         let conn = this.getConnection();
         let sql = `
-        SELECT b.bid, b.title, u.uid, b.viewCount, u.uname, DATE_FORMAT(b.modTime, '%Y-%m-%d %T') AS modTime, b.content FROM bbs AS b
+        SELECT b.bid, b.title, u.uid, b.viewCount, b.replyCount, u.uname, u.photo, DATE_FORMAT(b.modTime, '%Y-%m-%d %T') AS modTime, b.content FROM bbs AS b
             JOIN users AS u
             ON b.uid=u.uid
             WHERE bid=?;
@@ -153,7 +153,7 @@ module.exports = {
     getReply: function(bid, callback) {
         let conn = this.getConnection();
         let sql = `
-        SELECT r.bid, r.rid, u.uname, DATE_FORMAT(r.regTime, '%Y-%m-%d %T') AS regTime, r.content, r.isMine FROM reply AS r
+        SELECT r.bid, r.rid, u.uname, u.photo, DATE_FORMAT(r.regTime, '%Y-%m-%d %T') AS regTime, r.content, r.isMine FROM reply AS r
             JOIN users AS u ON r.uid=u.uid
             WHERE r.bid=?;`;
         conn.query(sql, bid, (error, results, fields) => {
@@ -211,7 +211,7 @@ module.exports = {
         console.log(title);
         let conn = this.getConnection();
         let sql = `
-        SELECT bid, bbs.uid, users.uname, title, DATE_FORMAT(modTime, '%Y-%m-%d %T') AS regDate, viewCount, replyCount FROM bbs
+        SELECT bid, bbs.uid, users.uname, users.photo, title, DATE_FORMAT(modTime, '%Y-%m-%d %T') AS regDate, viewCount, replyCount FROM bbs
             JOIN users ON users.uid=bbs.uid
             WHERE title LIKE ? AND bbs.isDeleted=0
             ORDER BY bid DESC LIMIT 10;`;

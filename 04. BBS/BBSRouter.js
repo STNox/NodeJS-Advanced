@@ -2,10 +2,19 @@ const express = require('express');
 const dm = require('./db/db-module');
 const am = require('./view/alertMessage');
 const util = require('./util');
+const multer = require('multer');
+
 
 
 const bbsRouter = express.Router();
-
+const upload = multer({
+    storage: multer.diskStorage({
+        destination: __dirname + '/upload/',
+        filename: (req, file, cb) => {
+            cb(null, new Date().toISOString().replace(/[-:\.A-Z]/g, '') + '_' + file.originalname);
+        }
+    })
+});
 /* bbsRouter.get('/list', util.isLoggedIn, (req, res) => {
     dm.getBbsLists(rows => {
         const view = require('./view/BBS');

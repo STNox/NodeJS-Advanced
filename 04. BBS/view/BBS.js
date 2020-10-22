@@ -7,7 +7,7 @@ module.exports = {
             tableRow += `<tr>
                             <td style="padding-right: 20px; text-align: center;">${row.bid}</td>
                             <td style="padding-right: 20px; text-align: left;"><a href="/bbs/list/post/${row.bid}">${row.title} [${row.replyCount}]</a></td>
-                            <td style="padding-right: 20px; text-align: center;">${row.uname}</td>
+                            <td style="padding-right: 20px; text-align: center;"><img src="${row.photo}" width="20"> ${row.uname}</td>
                             <td style="padding-right: 20px; text-align: center;">${row.regDate}</td>
                             <td style="padding-right: 20px; text-align: center;">${row.viewCount}</td>
                         </tr>
@@ -49,7 +49,7 @@ module.exports = {
                                 <th style="text-align: center; width: 10%">글 번호</th>
                                 <th style="text-align: center; width: 40%">제목</th>
                                 <th style="text-align: center; width: 20%">글쓴이</th>
-                                <th style="text-align: center; width: 20%">날짜</th>
+                                <th style="text-align: center; width: 20%">작성일</th>
                                 <th style="text-align: center; width: 10%">조회 수</th>
                             </tr>
                         </thead>
@@ -109,23 +109,22 @@ module.exports = {
             return `
             ${template.header(userInfo.uid, userInfo.uname)}
             
-            <div class="container" style="margin-top: 100px">
+            <div class="container" style="margin-top: 30px">
                 <input type="hidden" name="uid" value="${result.uid}">
-                <table class="table table-striped table-sm">
+                <table class="table table-sm">
                     <tr>
-                        <td colspan="4" style="font-size: 30px">제목: ${result.title}</td>
+                        <td style="font-size: 30px">제목: ${result.title}</td>
+                        <td class="align-middle" style="text-align: right">작성자: <img src="${result.photo}" width="20"> ${result.uname}</td>
                     </tr>
                     <tr>
-                        <td>글 번호: ${result.bid}</td>
-                        <td style="text-align: center">작성자: ${result.uname}</td>
-                        <td style="text-align: right">작성 시간: ${result.modTime}</td>
-                        <td style="text-align: right">조회 수: ${result.viewCount}</td>
+                        <td style="text-align: left">글 번호: ${result.bid} | ${result.modTime}</td>
+                        <td style="text-align: right">조회: ${result.viewCount}, 댓글: ${result.replyCount}</td>
                     </tr>
                     <tr>
-                        <td colspan="4"></td>
+                        <td colspan="2"></td>
                     </tr>
                     <tr>
-                        <td colspan="4">${result.content}</td>
+                        <td colspan="2">${result.content}</td>
                     </tr>
                 </table>
                 <hr>
@@ -137,22 +136,22 @@ module.exports = {
                 <br><br>
                 <h4>댓글</h4>
                 <hr>
-                <div class="container border bg-light">
+                <div class="container border bg-light" style="width: 100px">
                     ${this.replyForm(result, r_result)}
-                <br>
                 </div>
                 <div class="container" style="margin-top: 20px">
                     <form method="post" action="/bbs/reply">
                         <input type="hidden" name="bid" value="${result.bid}">
-                        <table>
+                        <table class="mx-auto">
                             <tr>
                                 <td><textarea style="resize: none" name="content" id="content" cols="100" rows="3"></textarea></td>
-                                <td><button class="btn btn-primary" type="submit">작성</button></td>
+                                <td><button class="btn btn-primary" type="submit" style="width: 70px; height: 70px">작성</button></td>
                             </tr>
                         </table>
                     </form>
                 </div>
             </div>
+            <br>
             <br>
             <br>
             <br>
@@ -162,23 +161,22 @@ module.exports = {
             return `
             ${template.header(userInfo.uid, userInfo.uname)}
             
-            <div class="container" style="margin-top: 20px">
+            <div class="container" style="margin-top: 30px">
                 <input type="hidden" name="uid" value="${result.uid}">
-                <table class="table table-striped table-sm">
+                <table class="table table-sm">
                     <tr>
-                        <td colspan="4" style="height: 10%">제목: ${result.title}</td>
+                        <td style="font-size: 30px">제목: ${result.title}</td>
+                        <td class="align-middle" style="text-align: right">작성자: <img src="${result.photo}" width="20"> ${result.uname}</td>
                     </tr>
                     <tr>
-                        <td>글 번호: ${result.bid}</td>
-                        <td style="text-align: center">작성자: ${result.uname}</td>
-                        <td style="text-align: right">작성 시간: ${result.modTime}</td>
-                        <td style="text-align: right">조회 수: ${result.viewCount}</td>
+                        <td style="text-align: left">글 번호: ${result.bid} | ${result.modTime}</td>
+                        <td style="text-align: right">조회: ${result.viewCount}, 댓글: ${result.replyCount}</td>
                     </tr>
                     <tr>
-                        <td colspan="4"></td>
+                        <td colspan="2"></td>
                     </tr>
                     <tr>
-                        <td colspan="4">${result.content}</td>
+                        <td colspan="2">${result.content}</td>
                     </tr>
                 </table>
                 <hr>
@@ -188,22 +186,22 @@ module.exports = {
                 <br><br>
                 <h4>댓글</h4>
                 <hr>
-                <div class="container border bg-light">
+                <div class="container border bg-light" style="width">
                     ${this.replyForm(result, r_result)}
-                <br>
                 </div>
-                <div class="mx-auto" style="margin-top: 20px">
+                <div class="container" style="margin-top: 20px">
                     <form method="post" action="/bbs/reply">
                         <input type="hidden" name="bid" value="${result.bid}">
-                        <table>
+                        <table class="mx-auto">
                             <tr>
-                                <td><textarea style="resize: none" name="content" id="content" cols="100" rows="3"></textarea></td>
-                                <td><button class="btn btn-primary" type="submit">작성</button></td>
+                                <td class="align-middle"><textarea style="resize: none" name="content" id="content" cols="100" rows="3"></textarea></td>
+                                <td class="align-middle"><button class="btn btn-primary" type="submit" style="width: 70px; height: 70px">작성</button></td>
                             </tr>
                         </table>
                     </form>
                 </div>
             </div>
+            <br>
             <br>
             <br>
             <br>
@@ -244,7 +242,7 @@ module.exports = {
             tableRow += `<tr>
                             <td style="padding-right: 20px; text-align: center;">${row.bid}</td>
                             <td style="padding-right: 20px; text-align: left;"><a href="/bbs/list/post/${row.bid}">${row.title} [${row.replyCount}]</a></td>
-                            <td style="padding-right: 20px; text-align: center;">${row.uname}</td>
+                            <td style="padding-right: 20px; text-align: center;"><img src="${row.photo}" width="20"> ${row.uname}</td>
                             <td style="padding-right: 20px; text-align: center;">${row.regDate}</td>
                             <td style="padding-right: 20px; text-align: center;">${row.viewCount}</td>
                         </tr>
@@ -286,13 +284,14 @@ module.exports = {
         for (let row of r_result) {
             tableRow += `<table cellpadding="7">
                             <tr>
-                                <td style="padding-right: 20px; text-align: center;">${row.uname}</td>
+                                <td style="padding-right: 20px; text-align: center;"><img src="${row.photo}" width="20">${row.uname}</td>
                                 <td style="padding-right: 20px; text-align: right;">${row.regTime}</td>
                             </tr><br>
                             <tr>
-                                <td class="border bg-white" colspan="2" style="; padding-right: 20px; text-align: auto;">${row.content}</td>
+                                <td class="border bg-white" colspan="2" style="padding-right: 20px; text-align: auto;">${row.content}</td>
                             </tr>
                         </table>
+                        <hr>
                         `;
             if (row.bid !== result.bid) {
                 tableRow = '';
