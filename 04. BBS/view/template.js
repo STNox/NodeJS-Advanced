@@ -145,10 +145,10 @@ module.exports = {
                         <table class="table table-borderless">
                         <tr>
                             <td style="text-align: center;">
-                            <a href="/bbs/list/1"><i class="far fa-list-alt" style="margin-right: 10px; font-size: 100px; color: grey"></i></a>
+                            <a href="/bbs/list/1"><i class="far fa-list-alt" style="margin-right: 10px; font-size: 100px; color: black"></i></a>
                             </td>
                             <td style="text-align: center;">
-                            <a href="/user/userInfo/${uid}"><i class="fas fa-user" style="margin-right: 10px; font-size: 100px; color: darkblue"></i></a>
+                            <a href="/user/userInfo/${uid}"><i class="fas fa-user" style="margin-right: 10px; font-size: 100px; color: #2EFE2E"></i></a>
                             </td>
                             <td style="text-align: center;">
                             <a href="/logout"><i class="fas fa-sign-out-alt" style="margin-right: 10px; font-size: 100px; color: darkred"></i></a>

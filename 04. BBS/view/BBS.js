@@ -153,6 +153,9 @@ module.exports = {
                     </form>
                 </div>
             </div>
+            <br>
+            <br>
+            <br>
     
             ${template.footer()}`
         } else {
@@ -189,7 +192,7 @@ module.exports = {
                     ${this.replyForm(result, r_result)}
                 <br>
                 </div>
-                <div class="container" style="margin-top: 20px">
+                <div class="mx-auto" style="margin-top: 20px">
                     <form method="post" action="/bbs/reply">
                         <input type="hidden" name="bid" value="${result.bid}">
                         <table>
@@ -201,6 +204,9 @@ module.exports = {
                     </form>
                 </div>
             </div>
+            <br>
+            <br>
+            <br>
     
             ${template.footer()}`
         }

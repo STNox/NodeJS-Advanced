@@ -183,10 +183,14 @@ module.exports = {
         });
         conn.end();
     },
-    myReply: function(uid, callback) {
+    myReply: function(bid, callback) {
         let conn = this.getConnection();
-        let sql = `UPDATE reply SET isMine=isMine+1 WHERE uid=?;`;
-        conn.query(sql, uid, (error, field) => {
+        let sql = `
+        UPDATE reply AS r INNER JOIN users AS u
+            ON r.uid=u.uid
+            SET isMine=IF(r.uid=u.uid, 1, 0)
+            WHERE bid=?;`;
+        conn.query(sql, bid, (error, field) => {
             if (error)
                 console.log(error);
             callback();
