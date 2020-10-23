@@ -16,6 +16,7 @@ module.exports = {
             <style type="text/CSS">
                 a:link{color: black; text-decoration: none;}
                 a:visited{color: grey; text-decoration: none;}
+                .div-1 {background-color: #D7DBDD;}
             </style>
         </head>
         <body>

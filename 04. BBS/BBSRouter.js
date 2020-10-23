@@ -9,7 +9,7 @@ const multer = require('multer');
 const bbsRouter = express.Router();
 const upload = multer({
     storage: multer.diskStorage({
-        destination: __dirname + '/upload/',
+        destination: __dirname + '/public/upload',
         filename: (req, file, cb) => {
             cb(null, new Date().toISOString().replace(/[-:\.A-Z]/g, '') + '_' + file.originalname);
         }
@@ -46,11 +46,12 @@ bbsRouter.get('/create', (req, res) => {
     res.send(html);
 });
 
-bbsRouter.post('/create', (req, res) => {
+bbsRouter.post('/create', upload.single('image'), (req, res) => {
     let uid = req.body.uid;
     let title = req.body.title;
     let content = req.body.content;
-    let params = [uid, title, content];
+    let image = req.file ? `/upload/${req.file.filename}` : '/upload/blank.jpg';
+    let params = [uid, title, content, image];
     dm.regPost(params, function() {
         res.redirect('/bbs/list/1');
     });
@@ -84,14 +85,15 @@ bbsRouter.get('/update/:bid/uid/:uid', util.isLoggedIn, (req, res) => {
     }
 });
 
-bbsRouter.post('/update', util.isLoggedIn, (req, res) => {
+bbsRouter.post('/update', util.isLoggedIn, upload.single('image'), (req, res) => {
     let title = req.body.title;
     let content = req.body.content;
     let bid = req.body.bid;
-    let params = [title, content, bid];
+    let image = req.file ? `/upload/${req.file.filename}` : '/upload/blank.jpg';
+    let params = [title, content, image, bid];
     console.log(params);
     dm.updatePost(params, () => {
-        res.redirect('/bbs/list/1');
+        res.redirect(`/bbs/list/post/${bid}`);
     });
 });
 
@@ -128,7 +130,9 @@ bbsRouter.post('/reply', (req, res) => {
     let params = [bid, uid, content];
     dm.regReply(params, function() {
         dm.replyCount(bid, () => {
-            res.redirect(`/bbs/list/post/${bid}`);
+            dm.myReply(bid, () => {
+                res.redirect(`/bbs/list/post/${bid}`);
+            });
         });
     });
 });

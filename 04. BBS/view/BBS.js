@@ -7,7 +7,7 @@ module.exports = {
             tableRow += `<tr>
                             <td style="padding-right: 20px; text-align: center;">${row.bid}</td>
                             <td style="padding-right: 20px; text-align: left;"><a href="/bbs/list/post/${row.bid}">${row.title} [${row.replyCount}]</a></td>
-                            <td style="padding-right: 20px; text-align: center;"><img src="${row.photo}" width="20"> ${row.uname}</td>
+                            <td style="padding-right: 20px; text-align: left;"><img src="${row.photo}" width="20"> ${row.uname}</td>
                             <td style="padding-right: 20px; text-align: center;">${row.regDate}</td>
                             <td style="padding-right: 20px; text-align: center;">${row.viewCount}</td>
                         </tr>
@@ -47,8 +47,8 @@ module.exports = {
                         <thead>
                             <tr>    
                                 <th style="text-align: center; width: 10%">글 번호</th>
-                                <th style="text-align: center; width: 40%">제목</th>
-                                <th style="text-align: center; width: 20%">글쓴이</th>
+                                <th style="text-align: center; width: 43%">제목</th>
+                                <th style="text-align: center; width: 17%">글쓴이</th>
                                 <th style="text-align: center; width: 20%">작성일</th>
                                 <th style="text-align: center; width: 10%">조회 수</th>
                             </tr>
@@ -81,7 +81,7 @@ module.exports = {
         <div class="container" style="margin-top: 20px">
             <h3>게시글 작성</h3>
             <hr>
-            <form method="POST" action="/bbs/create">
+            <form method="POST" action="/bbs/create" enctype="multipart/form-data">
                 <table class="table-borderless">
                     <input type="hidden" name="uid" value="${uid}">
                     <tr>
@@ -93,7 +93,11 @@ module.exports = {
                         <td><textarea class="form-control" style="resize: none" name="content" id="content" cols="140" rows="15"></textarea></td>
                     </tr>
                     <tr>
-                        <td colspan="2" style="text-align: center;">
+                        <td><label class="col-form-label" for="image" style="margin-right: 10px">이미지</label></td>
+                        <td><input class="form-control" type="file" name="image" id="image"></td>
+                    </tr>
+                    <tr>
+                        <td colspan="2" style="text-align: center">
                             <button type="submit" class="btn btn-primary">작성 완료</button>
                         </td>
                     </tr>
@@ -125,7 +129,7 @@ module.exports = {
                         <td colspan="2"></td>
                     </tr>
                     <tr>
-                        <td colspan="2">${result.content}</td>
+                        <td colspan="2"><img src="${result.image}"><br><br>${result.content}</td>
                     </tr>
                 </table>
                 <hr>
@@ -137,8 +141,9 @@ module.exports = {
                 <br><br>
                 <h4>댓글</h4>
                 <hr>
-                <div class="container border bg-light" style="width: 800px">
+                <div class="container rounded borderless div-1" style="width: 800px">
                     ${this.replyForm(result, r_result)}
+                    <br><br>
                 </div>
                 <div class="container" style="margin-top: 20px">
                     <form method="post" action="/bbs/reply">
@@ -177,7 +182,7 @@ module.exports = {
                         <td colspan="2"></td>
                     </tr>
                     <tr>
-                        <td colspan="2">${result.content}</td>
+                        <td colspan="2"><img src="${result.image}"><br><br>${result.content}</td>
                     </tr>
                 </table>
                 <hr>
@@ -187,8 +192,9 @@ module.exports = {
                 <br><br>
                 <h4>댓글</h4>
                 <hr>
-                <div class="container border bg-light" style="width: 800px">
+                <div class="container rounded borderless div-1" style="width: 800px">
                     ${this.replyForm(result, r_result)}
+                    <br><br>
                 </div>
                 <div class="container" style="margin-top: 20px">
                     <form method="post" action="/bbs/reply">
@@ -215,7 +221,7 @@ module.exports = {
         ${template.header(result.uid, result.uname)}
         
         <div class="container" style="margin-top: 20px">
-        <form action="/bbs/update" method="POST">
+        <form action="/bbs/update" method="POST" enctype="multipart/form-data">
             <input type="hidden" name="uid" value="${result.uid}">
             <input type="hidden" name="bid" value="${result.bid}">
             <table>
@@ -225,7 +231,12 @@ module.exports = {
                 </tr>
                 <tr>
                     <td><label class="col-form-label" for="content" style="margin-right: 10px">내용</label></td>
-                    <td><textarea class="form-control" style="resize: none" name="content" id="content" cols="140" rows="15">${result.content}</textarea></td>
+                    <td><textarea class="form-control" style="resize: none" name="content" id="content" cols="100" rows="15">${result.content}</textarea></td>
+                    <td><img src="${result.image}" width="200"></td>
+                </tr>
+                <tr>
+                    <td><label class="col-form-label" for="image" style="margin-right: 10px">이미지</label></td>
+                    <td><input class="form-control" type="file" name="image" id="image"></td>
                 </tr>
                 <tr>
                     <td style="text-align: center" colspan="2"><button type="submit" class="btn btn-primary">수정</button></td>
@@ -281,23 +292,38 @@ module.exports = {
         `;
     },
     replyForm: function(result, r_result) {
-        console.log(r_result);
         let tableRow = '';
         for (let row of r_result) {
-            tableRow += `<table cellpadding="7" width="300">
-                            <tr>
-                                <td style="padding-right: 20px; text-align: center;"><img src="${row.photo}" width="20"> ${row.uname}</td>
-                                <td style="padding-right: 20px; text-align: right;">${row.regTime}</td>
-                            </tr><br>
-                            <tr>
-                                <td class="border bg-white" colspan="2" style="padding-right: 20px; text-align: auto;">${row.content}</td>
-                            </tr>
-                        </table>
-                        <hr>
-                        `;
             if (row.bid !== result.bid) {
                 tableRow = '';
-            }     
+            } else{
+                if (row.isMine === 1) {
+                    tableRow += `<table cellpadding="7" width="300" class="float-right">
+                                    <tr>
+                                        <td style="padding-right: 20px; text-align: center;"><img src="${row.photo}" width="20"> ${row.uname}</td>
+                                        <td style="padding-right: 20px; text-align: right;">${row.regTime}</td>
+                                    </tr><br>
+                                    <tr>
+                                        <td class="borderless bg-primary text-white rounded" colspan="2" style="padding-right: 20px; text-align: auto;">${row.content}</td>
+                                    </tr>
+                                </table>
+                                <br><br><br>
+                                `;
+    
+                } else {
+                    tableRow += `<table cellpadding="7" width="300" class="float-left">
+                                    <tr>
+                                        <td style="padding-right: 20px; text-align: center;"><img src="${row.photo}" width="20"> ${row.uname}</td>
+                                        <td style="padding-right: 20px; text-align: right;">${row.regTime}</td>
+                                    </tr><br>
+                                    <tr>
+                                        <td class="borderless bg-white rounded" colspan="2" style="padding-right: 20px; text-align: auto;">${row.content}</td>
+                                    </tr>
+                                </table>
+                                <br><br><br>
+                                `;
+                }
+            }    
         }
         return `${tableRow}`;
     }

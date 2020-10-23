@@ -97,7 +97,7 @@ module.exports = {
     },
     regPost: function(params, callback) {
         let conn = this.getConnection();
-        let sql = `INSERT INTO bbs(uid, title, content) VALUES(?, ?, ?);`;
+        let sql = `INSERT INTO bbs(uid, title, content, image) VALUES(?, ?, ?, ?);`;
         conn.query(sql, params, (error, fields) => {
             if (error)
                 console.log(error);
@@ -108,7 +108,7 @@ module.exports = {
     getPost: function(bid, callback) {
         let conn = this.getConnection();
         let sql = `
-        SELECT b.bid, b.title, u.uid, b.viewCount, b.replyCount, u.uname, u.photo, DATE_FORMAT(b.modTime, '%Y-%m-%d %T') AS modTime, b.content FROM bbs AS b
+        SELECT b.bid, b.title, u.uid, b.viewCount, b.replyCount, u.uname, u.photo, DATE_FORMAT(b.modTime, '%Y-%m-%d %T') AS modTime, b.content, b.image FROM bbs AS b
             JOIN users AS u
             ON b.uid=u.uid
             WHERE bid=?;
@@ -122,7 +122,7 @@ module.exports = {
     },
     updatePost: function(params, callback) {
         let conn = this.getConnection();
-        let sql = `UPDATE bbs SET title=?, content=? WHERE bid=?;`;
+        let sql = `UPDATE bbs SET title=?, content=?, image=? WHERE bid=?;`;
         conn.query(sql, params, (error, fields) => {
             if (error)
                 console.log(error);
@@ -186,10 +186,10 @@ module.exports = {
     myReply: function(bid, callback) {
         let conn = this.getConnection();
         let sql = `
-        UPDATE reply AS r INNER JOIN users AS u
-            ON r.uid=u.uid
-            SET isMine=IF(r.uid=u.uid, 1, 0)
-            WHERE bid=?;`;
+        UPDATE reply AS r INNER JOIN bbs AS b
+            ON r.uid=b.uid
+            SET isMine=IF(r.uid=b.uid, 1, 0)
+            WHERE b.bid=?;`;
         conn.query(sql, bid, (error, field) => {
             if (error)
                 console.log(error);

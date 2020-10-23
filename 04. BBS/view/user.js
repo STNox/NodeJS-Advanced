@@ -258,4 +258,4 @@ module.exports = {
         
         ${template.footer()}`
     }
-} // 댓글, 게시판에 이미지 출력
+}
