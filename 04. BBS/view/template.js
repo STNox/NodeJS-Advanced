@@ -8,10 +8,11 @@ module.exports = {
             <meta charset="utf-8">
             <meta name="viewport" content="width=device-width, initial-scale=1">
             <link rel="stylesheet" href="/bootstrap/css/bootstrap.min.css">
-            <link rel="stylesheet" href="/fontawesome-free-5.15.1-web/css/all.min.css"
+            <link rel="stylesheet" href="/fontawesome-free-5.15.1-web/css/all.min.css">
             <script src="/jquery/jquery.min.js"></script>
             <script src="/popper/popper.min.js"></script>
             <script src="/bootstrap/js/bootstrap.min.js"></script>
+            <script type="text/javascript" charset="utf-8" src="/naver-smarteditor2-ca95d21/js/service/HuskyEZCreator.js"></script>
             <style type="text/CSS">
                 a:link{color: black; text-decoration: none;}
                 a:visited{color: grey; text-decoration: none;}
@@ -145,10 +146,10 @@ module.exports = {
                         <table class="table table-borderless">
                         <tr>
                             <td style="text-align: center;">
-                            <a href="/bbs/list/1"><i class="far fa-list-alt" style="margin-right: 10px; font-size: 100px; color: black"></i></a>
+                            <a href="/bbs/list/1"><i class="far fa-list-alt" style="margin-right: 10px; font-size: 100px; color: darkblue"></i></a>
                             </td>
                             <td style="text-align: center;">
-                            <a href="/user/userInfo/${uid}"><i class="fas fa-user" style="margin-right: 10px; font-size: 100px; color: #2EFE2E"></i></a>
+                            <a href="/user/userInfo/${uid}"><i class="fas fa-user" style="margin-right: 10px; font-size: 100px; color: black"></i></a>
                             </td>
                             <td style="text-align: center;">
                             <a href="/logout"><i class="fas fa-sign-out-alt" style="margin-right: 10px; font-size: 100px; color: darkred"></i></a>

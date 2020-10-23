@@ -94,7 +94,7 @@ module.exports = {
                     <div class="col-8">    
                     <table class="table">
                         <tr>
-                            <td class="align-middle" style="text-align: center" rowspan="4"><img src="${result.photo}" width="200"></td>
+                            <td class="align-middle" style="text-align: center" rowspan="4"><img src="${result.photo}" width="250"></td>
                             <td class="align-middle"><label for="uid">사용자 ID</label></td>
                             <td class="align-middle">${result.uid}</td>
                         </tr>
@@ -139,6 +139,9 @@ module.exports = {
                             <td style="padding-right: 20px; text-align: center;"><img src="${row.photo}" width="20"> ${row.uname}</td>
                             <td style="padding-right: 20px; text-align: center;">${row.tel}</td>
                             <td style="padding-right: 20px; text-align: center;">${row.email}</td>
+                            <td style="padding-right: 20px; text-align: center;">
+                                <button class="btn btn-outline-danger" data-toggle="tooltip" title="삭제" data-placement="bottom" onclick="location.href='/user/delete/${row.uid}'"><i class="far fa-trash-alt"></i></button>
+                            </td>
                         </tr>
                         `;
         }
@@ -150,13 +153,14 @@ module.exports = {
                 <div class="col-1"></div>
                 <div class="col-10">
                     <h3>사용자 목록</h3>
-                    <table class="table table-striped" style="margin-top: 20px">
+                    <table class="table" style="margin-top: 20px">
                         <thead>
                             <tr>    
                                 <th style="text-align: center; width: 10%">사용자 ID</th>
-                                <th style="text-align: center; width: 40%">사용자 이름</th>
+                                <th style="text-align: center; width: 35%">사용자 이름</th>
                                 <th style="text-align: center; width: 20%">전화 번호</th>
                                 <th style="text-align: center; width: 20%">이메일 주소</th>
+                                <th style="text-align: center; width: 5%">탈퇴</th>
                             </tr>
                         </thead>
                         <tbody>
@@ -168,6 +172,7 @@ module.exports = {
                 </div>
             </div>
         </div>
+        <br><br><br><br>
 
         ${template.footer()}`
     },
@@ -185,7 +190,7 @@ module.exports = {
                     <div class="col-2"></div>
                     <div class="col-8">
                         <p class="text-danger">*는 필수정보입니다.</p>
-                        <form action="/user/update" method="post">
+                        <form action="/user/update" method="post" enctype="multipart/form-data">
                             <input type="hidden" name="uid" value="${result.uid}">
                             <table class="table">
                                 <tr>
@@ -253,4 +258,4 @@ module.exports = {
         
         ${template.footer()}`
     }
-} // 사용자 정보 수정 화면에서 프사를 별도로 올리지 않을 경우 현재 떠 있는 프사 나오게, 댓글, 게시판에 이미지 출력, 관리자 사용자 정보 오류
+} // 댓글, 게시판에 이미지 출력

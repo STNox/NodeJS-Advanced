@@ -85,12 +85,12 @@ module.exports = {
                 <table class="table-borderless">
                     <input type="hidden" name="uid" value="${uid}">
                     <tr>
-                        <td><label for="title" style="margin-right: 10px">제목</label></td>
-                        <td><input type="text" name="title" id="title" size="100"></td>
+                        <td><label class="col-form-label" for="title" style="margin-right: 10px">제목</label></td>
+                        <td><input class="form-control" type="text" name="title" id="title" size="100"></td>
                     </tr>
                     <tr>
-                        <td><label for="content" style="margin-right: 10px">내용</label></td>
-                        <td><textarea style="resize: none" name="content" id="content" cols="140" rows="15"></textarea></td>
+                        <td><label class="col-form-label" for="content" style="margin-right: 10px">내용</label></td>
+                        <td><textarea class="form-control" style="resize: none" name="content" id="content" cols="140" rows="15"></textarea></td>
                     </tr>
                     <tr>
                         <td colspan="2" style="text-align: center;">
@@ -99,6 +99,7 @@ module.exports = {
                     </tr>
                 </table>
             </form>
+            <button class="btn btn-info float-right" onclick="location.href='/bbs/list/1'">돌아가기</buttton>
         </div>
         ${template.footer()}
         `;
@@ -136,7 +137,7 @@ module.exports = {
                 <br><br>
                 <h4>댓글</h4>
                 <hr>
-                <div class="container border bg-light" style="width: 100px">
+                <div class="container border bg-light" style="width: 800px">
                     ${this.replyForm(result, r_result)}
                 </div>
                 <div class="container" style="margin-top: 20px">
@@ -186,7 +187,7 @@ module.exports = {
                 <br><br>
                 <h4>댓글</h4>
                 <hr>
-                <div class="container border bg-light" style="width">
+                <div class="container border bg-light" style="width: 800px">
                     ${this.replyForm(result, r_result)}
                 </div>
                 <div class="container" style="margin-top: 20px">
@@ -219,18 +220,19 @@ module.exports = {
             <input type="hidden" name="bid" value="${result.bid}">
             <table>
                 <tr>
-                    <td><label for="title" style="margin-right: 10px">제목</label></td>
-                    <td><input type="text" name="title" id="title" style="width: 400px" value="${result.title}"></td>
+                    <td><label class="col-form-label" for="title" style="margin-right: 10px">제목</label></td>
+                    <td><input class="form-control" type="text" name="title" id="title" style="width: 400px" value="${result.title}"></td>
                 </tr>
                 <tr>
-                    <td><label for="content" style="margin-right: 10px">내용</label></td>
-                    <td><input type="text" name="content" id="content" style="width: 800px; height: 400px" value="${result.content}"></td>
+                    <td><label class="col-form-label" for="content" style="margin-right: 10px">내용</label></td>
+                    <td><textarea class="form-control" style="resize: none" name="content" id="content" cols="140" rows="15">${result.content}</textarea></td>
                 </tr>
                 <tr>
                     <td style="text-align: center" colspan="2"><button type="submit" class="btn btn-primary">수정</button></td>
                 </tr>
             </table>
         </form>
+        <button class="btn btn-info float-right" onclick="location.href='/bbs/list/post/${result.bid}'">돌아가기</buttton>
         </div>
 
         ${template.footer()}
@@ -282,9 +284,9 @@ module.exports = {
         console.log(r_result);
         let tableRow = '';
         for (let row of r_result) {
-            tableRow += `<table cellpadding="7">
+            tableRow += `<table cellpadding="7" width="300">
                             <tr>
-                                <td style="padding-right: 20px; text-align: center;"><img src="${row.photo}" width="20">${row.uname}</td>
+                                <td style="padding-right: 20px; text-align: center;"><img src="${row.photo}" width="20"> ${row.uname}</td>
                                 <td style="padding-right: 20px; text-align: right;">${row.regTime}</td>
                             </tr><br>
                             <tr>

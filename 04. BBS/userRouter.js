@@ -9,7 +9,7 @@ const multer = require('multer');
 const userRouter = express.Router();
 const upload = multer({
     storage: multer.diskStorage({
-        destination: __dirname + '/upload/',
+        destination: __dirname + '/public/upload/',
         filename: (req, file, cb) => {
             cb(null, new Date().toISOString().replace(/[-:\.A-Z]/g, '') + '_' + file.originalname);
         }
@@ -82,14 +82,14 @@ userRouter.post('/update', upload.single('photo'), (req, res) => {
     let uname = req.body.uname;
     let tel = req.body.tel;
     let email = req.body.email;
-    let photo = req.file ? `/upload/${req.file.filename}` : '/upload/default'
+    let photo = req.file ? `/upload/${req.file.filename}` : `/upload/${req.body.photo}`; 
     if (pwd === '' || pwd2 === '' || uname === '') {
         let html = am.alertMsg('필수 정보를 입력하십시오', `/user/update/${uid}`);
         res.send(html);
     } else {
         if (pwd === pwd2) {
             let pwdHash = util.genHash(pwd);
-            let params = [pwdHash, tel, email, uname, uid];
+            let params = [pwdHash, tel, email, uname, photo, uid];
             dm.updateUser(params, function() {
                 let html = am.alertMsg('사용자 정보가 변경되었습니다.', '/home');
                 res.send(html);

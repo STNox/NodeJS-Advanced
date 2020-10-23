@@ -42,7 +42,7 @@ module.exports = {
     },
     getUserList: function(callback) {
         let conn = this.getConnection();
-        let sql = `SELECT uid, uname, tel, email, photo, FROM users WHERE isDeleted=0;`;
+        let sql = `SELECT uid, uname, tel, email, photo FROM users WHERE isDeleted=0;`;
         conn.query(sql, (error, rows, field) => {
             if (error)
                 console.log(error);
