@@ -43,7 +43,7 @@ module.exports = {
                 <div class="col-1"></div>
                 <div class="col-10">
                     <h3>게시판</h3>
-                    <table class="table table-striped" style="margin-top: 20px">
+                    <table class="table" style="margin-top: 20px">
                         <thead>
                             <tr>    
                                 <th style="text-align: center; width: 10%">글 번호</th>
@@ -116,7 +116,7 @@ module.exports = {
             
             <div class="container" style="margin-top: 30px">
                 <input type="hidden" name="uid" value="${result.uid}">
-                <table class="table table-sm">
+                <table class="table table-borderless table-sm">
                     <tr>
                         <td style="font-size: 30px">제목: ${result.title}</td>
                         <td class="align-middle" style="text-align: right">작성자: <img src="${result.photo}" width="20"> ${result.uname}</td>
@@ -129,7 +129,10 @@ module.exports = {
                         <td colspan="2"></td>
                     </tr>
                     <tr>
-                        <td colspan="2"><img src="${result.image}"><br><br>${result.content}</td>
+                        <td colspan="2" style="text-align: center"><img src="${result.image}" width="500"></td>
+                    </tr>
+                    <tr>
+                        <td colspan="2">${result.content}</td>
                     </tr>
                 </table>
                 <hr>
@@ -169,7 +172,7 @@ module.exports = {
             
             <div class="container" style="margin-top: 30px">
                 <input type="hidden" name="uid" value="${result.uid}">
-                <table class="table table-sm">
+                <table class="table table-borderless table-sm">
                     <tr>
                         <td style="font-size: 30px">제목: ${result.title}</td>
                         <td class="align-middle" style="text-align: right">작성자: <img src="${result.photo}" width="20"> ${result.uname}</td>
@@ -182,7 +185,10 @@ module.exports = {
                         <td colspan="2"></td>
                     </tr>
                     <tr>
-                        <td colspan="2"><img src="${result.image}"><br><br>${result.content}</td>
+                        <td colspan="2" style="text-align: center"><img src="${result.image}" width="500"></td>
+                    </tr>
+                    <tr>
+                        <td colspan="2">${result.content}</td>
                     </tr>
                 </table>
                 <hr>

@@ -112,7 +112,7 @@ bbsRouter.post('/search', util.isLoggedIn, (req, res) => {
     let title = req.body.title;
     dm.search(title, rows => {
         if (rows.length < 1) {
-            let html = am.alertMsg('검색결과가 없습니다.', '/bbs/list');
+            let html = am.alertMsg('검색결과가 없습니다.', '/bbs/list/1');
             res.send(html);
         } else {
             const view = require('./view/BBS');

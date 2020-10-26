@@ -76,13 +76,14 @@ userRouter.get('/update/:uid', util.isLoggedIn, (req, res) => {
 });
 
 userRouter.post('/update', upload.single('photo'), (req, res) => {
+    console.log(req.body);
     let uid = req.body.uid;
     let pwd = req.body.pwd;
     let pwd2 = req.body.pwd2;
     let uname = req.body.uname;
     let tel = req.body.tel;
     let email = req.body.email;
-    let photo = req.file ? `/upload/${req.file.filename}` : `${req.body.photo}`; 
+    let photo = req.file ? `/upload/${req.file.filename}` : '/upload/default.png'; 
     if (pwd === '' || pwd2 === '' || uname === '') {
         let html = am.alertMsg('필수 정보를 입력하십시오', `/user/update/${uid}`);
         res.send(html);

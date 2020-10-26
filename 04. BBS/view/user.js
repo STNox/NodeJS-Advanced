@@ -50,7 +50,7 @@ module.exports = {
                                 </tr>
                                 <tr>
                                     <td><label for="tel">전화 번호</label></td>
-                                    <td><input type="text" name="tel" id="tel"></td>
+                                    <td><input type="text" name="tel" id="tel" placeholder="010-0000-0000"></td>
                                 </tr>
                                 <tr>
                                     <td><label for="email">이메일</label></td>
@@ -61,7 +61,7 @@ module.exports = {
                                     <td><input type="file" name="photo" id="photo"></td>
                                 <tr>
                                     <td colspan="2" style="text-align: center;">
-                                        <input class="btn btn-primary" type="submit" value="제출">
+                                        <input class="btn btn-primary" type="submit" value="회원 가입">
                                         <input class="btn btn-secondary" type="reset" value="내용 전체 삭제">
                                     </td>
                                 </tr>
@@ -135,11 +135,12 @@ module.exports = {
         let tableRow = '';
         for (let row of rows) {
             tableRow += `<tr>
-                            <td style="padding-right: 20px; text-align: center;"><a href="/user/userInfo/${row.uid}">${row.uid}</a></td>
-                            <td style="padding-right: 20px; text-align: center;"><img src="${row.photo}" width="20"> ${row.uname}</td>
-                            <td style="padding-right: 20px; text-align: center;">${row.tel}</td>
-                            <td style="padding-right: 20px; text-align: center;">${row.email}</td>
-                            <td style="padding-right: 20px; text-align: center;">
+                            <td class="align-middle" style="padding-right: 20px; text-align: center;"><a href="/user/userInfo/${row.uid}">${row.uid}</a></td>
+                            <td class="align-middle" style="padding-right: 20px; text-align: center;"><img src="${row.photo}" height="50"></td> 
+                            <td class="align-middle" style="padding-right: 20px; text-align: center;">${row.uname}</td>
+                            <td class="align-middle" style="padding-right: 20px; text-align: center;">${row.tel}</td>
+                            <td class="align-middle" style="padding-right: 20px; text-align: center;">${row.email}</td>
+                            <td class="align-middle" style="padding-right: 20px; text-align: center;">
                                 <button class="btn btn-outline-danger" data-toggle="tooltip" title="삭제" data-placement="bottom" onclick="location.href='/user/delete/${row.uid}'"><i class="far fa-trash-alt"></i></button>
                             </td>
                         </tr>
@@ -154,10 +155,11 @@ module.exports = {
                 <div class="col-10">
                     <h3>사용자 목록</h3>
                     <table class="table" style="margin-top: 20px">
-                        <thead>
+                        <thead class="thead-light">
                             <tr>    
                                 <th style="text-align: center; width: 10%">사용자 ID</th>
-                                <th style="text-align: center; width: 35%">사용자 이름</th>
+                                <th style="text-align: center; width: 10%">프로필</th>
+                                <th style="text-align: center; width: 25%">사용자 이름</th>
                                 <th style="text-align: center; width: 20%">전화 번호</th>
                                 <th style="text-align: center; width: 20%">이메일 주소</th>
                                 <th style="text-align: center; width: 5%">탈퇴</th>
