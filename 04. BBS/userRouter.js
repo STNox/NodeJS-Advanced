@@ -54,7 +54,7 @@ userRouter.get('/userInfo/:uid', util.isLoggedIn, (req, res) => {
     if (uid !== 'admin') {
         dm.getUserInfo(uid, result => {
             const view = require('./view/user');
-            let html = view.userInfo(result);
+            let html = view.userInfo(req.session, result);
             res.send(html);
         });
     } else {

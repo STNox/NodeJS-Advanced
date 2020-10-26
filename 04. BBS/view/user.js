@@ -79,10 +79,9 @@ module.exports = {
 
         `;
     },
-    userInfo: function(result) {
-        console.log(result.photo);
+    userInfo: function(userInfo, result) {
         return `
-        ${template.header(result.uid, result.uname)}
+        ${template.header(userInfo.uid, userInfo.uname)}
         <div class="container" style="margin-top: 90px">
             <div class="container">
                 <div class="row">

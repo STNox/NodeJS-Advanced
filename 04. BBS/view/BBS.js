@@ -255,6 +255,31 @@ module.exports = {
         ${template.footer()}
         `
     },
+    deletePost: function(uid, uname, bid) {
+        return `
+        ${template.header(uid, uname)}
+
+        <div class="container" style="margin-top: 90px">
+            <div class="container">
+                <div class="row">
+                    <div class="col-3"></div>
+                    <div class="col-6">
+                        <h3>게시글 삭제</h3>
+                        <hr>
+                        <p style="text-align: center; font-weight: bold">정말 삭제하시겠습니까?</p>
+                        <br>
+                        <div style="text-align: center">
+                            <button class="btn btn-danger" onclick="location.href='/bbs/deleteConfirm/${bid}'">삭제</button>
+                            <button class="btn btn-secondary" onclick="location.href='/bbs/list/post/${bid}'">취소</button>
+                        </div>
+                    </div>
+                    <div class="col-3"></div>
+                </div>
+            </div>
+        </div>
+        
+        ${template.footer()}`
+    },
     searchList: function(userInfo, rows) {
         let tableRow = '';
         for (let row of rows) {

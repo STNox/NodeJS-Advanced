@@ -99,13 +99,22 @@ bbsRouter.post('/update', util.isLoggedIn, upload.single('image'), (req, res) =>
 
 bbsRouter.get('/delete/:bid/uid/:uid', util.isLoggedIn, (req, res) => {
     if (req.params.uid === req.session.uid) {
-        dm.deletePost(req.params.bid, () => {
-            res.redirect('/bbs/list/1');
-        });
+        let uid = req.session.uid;
+        let uname = req.session.uname;
+        let bid = req.params.bid;
+        const view = require('./view/BBS');
+        let html = view.deletePost(uid, uname, bid);
+        res.send(html);
     } else {
         let html = am.alertMsg('삭제 권한이 없습니다.', '/bbs/list/1');
         res.send(html);
     }
+});
+
+bbsRouter.get('/deleteConfirm/:bid', util.isLoggedIn, (req, res) => {
+    dm.deletePost(req.params.bid, () => {
+        res.redirect('/bbs/list/1');
+    });
 });
 
 bbsRouter.post('/search', util.isLoggedIn, (req, res) => {
