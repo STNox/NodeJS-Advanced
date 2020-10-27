@@ -22,7 +22,7 @@ module.exports = {
         <body>
             <nav id="top" class="navbar navbar-expand-sm bg-dark navbar-dark">
                 <a class="navbar-brand" href="#">
-                    <img src="/img/music.jpg" alt="Music Stidio" height="50px" style="margin-left: 10px;">
+                    <img src="/img/music.jpg" alt="Music Studio" height="50px" style="margin-left: 10px;">
                 </a>
                 <ul class="nav mr-auto">
                     <li class="nav-item">
